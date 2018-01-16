@@ -20,6 +20,7 @@ export enum ReducerID {
   range = 'range',
   diff = 'diff',
   diffperc = 'diffperc',
+  pctl95 = 'pctl95',
   delta = 'delta',
   step = 'step',
   firstNotNull = 'firstNotNull',
@@ -395,6 +396,13 @@ export const fieldReducers = new Registry<FieldReducerInfo>(() => [
     preservesUnits: false,
   },
   {
+    id: ReducerID.pctl95,
+    name: 'P95',
+    description: 'The score at or below which 95 % of the scores in the distribution may be found',
+    standard: false,
+    preservesUnits: true
+  },
+  {
     id: ReducerID.allValues,
     name: 'All values',
     description: 'Returns an array with all values',
@@ -461,6 +469,7 @@ export const defaultCalcs: FieldCalcs = {
   delta: 0,
   step: Number.MAX_VALUE,
   diffperc: 0,
+  pctl95: null,
   // Just used for calculations -- not exposed as a stat
   previousDeltaUp: true,
 };
@@ -551,6 +560,13 @@ export function doStandardCalcs(field: Field, ignoreNulls: boolean, nullAsZero: 
 
       calcs.lastNotNull = currentValue;
     }
+  }
+
+  if (isNumberField) {
+    calcs.pctl95 = percentile(
+      [...data.toArray()].sort((a, b) => a - b),
+      0.95
+    );
   }
 
   if (calcs.max === -Number.MAX_VALUE) {
@@ -702,4 +718,15 @@ function calculatePercentile(field: Field, percentile: number, ignoreNulls: bool
   const sorted = data.slice().sort((a, b) => a - b);
   const index = Math.round((sorted.length - 1) * percentile);
   return sorted[index];
+}
+
+function percentile(arr: number[], percent: number) {
+  if (arr.length === 0) {
+    return null;
+  }
+
+  const k = (arr.length - 1) * percent;
+  const f = Math.floor(k);
+
+  return arr[f];
 }
