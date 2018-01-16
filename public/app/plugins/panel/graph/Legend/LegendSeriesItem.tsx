@@ -5,7 +5,7 @@ import { selectors } from '@grafana/e2e-selectors';
 import { SeriesColorPicker, SeriesIcon } from '@grafana/ui';
 import { TimeSeries } from 'app/core/core';
 
-export const LEGEND_STATS = ['min', 'max', 'avg', 'current', 'total'] as const;
+export const LEGEND_STATS = ['min', 'max', 'avg', 'current', 'total', 'p95'] as const;
 export type LegendStat = typeof LEGEND_STATS[number];
 
 export interface LegendLabelProps {
@@ -24,6 +24,7 @@ export interface LegendValuesProps {
   avg?: boolean;
   current?: boolean;
   total?: boolean;
+  p95?: boolean;
 }
 
 type LegendItemProps = LegendLabelProps & LegendValuesProps;
