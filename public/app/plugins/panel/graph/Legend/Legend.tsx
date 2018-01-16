@@ -39,6 +39,7 @@ interface LegendValuesProps {
   avg?: boolean;
   current?: boolean;
   total?: boolean;
+  p95?: boolean;
 }
 
 interface LegendSortProps {
@@ -174,8 +175,9 @@ export class GraphLegend extends PureComponent<GraphLegendProps, LegendState> {
       avg,
       current,
       total,
+      p95,
     } = this.props;
-    const seriesValuesProps = { values, min, max, avg, current, total };
+    const seriesValuesProps = { values, min, max, avg, current, total, p95 };
     const hiddenSeries = this.state.hiddenSeries;
     const seriesHideProps = { hideEmpty, hideZero };
     const sortProps = { sort, sortDesc };
@@ -212,8 +214,8 @@ export class GraphLegend extends PureComponent<GraphLegendProps, LegendState> {
 
 class LegendSeriesList extends PureComponent<LegendComponentProps> {
   render() {
-    const { seriesList, hiddenSeries, values, min, max, avg, current, total } = this.props;
-    const seriesValuesProps = { values, min, max, avg, current, total };
+    const { seriesList, hiddenSeries, values, min, max, avg, current, total, p95 } = this.props;
+    const seriesValuesProps = { values, min, max, avg, current, total, p95 };
     return seriesList.map((series, i) => (
       <LegendItem
         // This trick required because TimeSeries.id is not unique (it's just TimeSeries.alias).
@@ -255,8 +257,8 @@ class LegendTable extends PureComponent<Partial<LegendComponentProps>> {
 
   render() {
     const seriesList = this.props.seriesList;
-    const { values, min, max, avg, current, total, sort, sortDesc, hiddenSeries } = this.props;
-    const seriesValuesProps: any = { values, min, max, avg, current, total };
+    const { values, min, max, avg, current, total, p95, sort, sortDesc, hiddenSeries } = this.props;
+    const seriesValuesProps: any = { values, min, max, avg, current, total, p95 };
 
     if (!seriesList) {
       return null;

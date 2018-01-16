@@ -53,6 +53,19 @@ export function updateLegendValues(data: TimeSeries[], panel: any, height: numbe
   }
 }
 
+function sortNumber(a: number, b: number) {
+  return a - b;
+}
+
+function percentile(arr: number[], percent: number) {
+  if (arr.length === 0) {
+    return false;
+  }
+  const k = (arr.length - 1) * percent;
+  const f = Math.floor(k);
+  return arr[f];
+}
+
 /**
  * @deprecated: This class should not be used in new panels
  *
@@ -204,6 +217,7 @@ export default class TimeSeries {
     this.stats.min = Number.MAX_VALUE;
     this.stats.logmin = Number.MAX_VALUE;
     this.stats.avg = null;
+    this.stats.p95 = null;
     this.stats.current = null;
     this.stats.first = null;
     this.stats.delta = 0;
@@ -219,6 +233,7 @@ export default class TimeSeries {
     let currentTime;
     let currentValue;
     let nonNulls = 0;
+    const p95Array = [];
     let previousTime;
     let previousValue = 0;
     let previousDeltaUp = true;
@@ -251,6 +266,7 @@ export default class TimeSeries {
           this.stats.total += currentValue;
           this.allIsNull = false;
           nonNulls++;
+          p95Array.push(currentValue);
         }
 
         if (currentValue > this.stats.max) {
@@ -302,6 +318,8 @@ export default class TimeSeries {
     }
 
     if (result.length && !this.allIsNull) {
+      p95Array.sort(sortNumber);
+      this.stats.p95 = percentile(p95Array, 0.95);
       this.stats.avg = this.stats.total / nonNulls;
       this.stats.current = result[result.length - 1][1];
       if (this.stats.current === null && result.length > 1) {
