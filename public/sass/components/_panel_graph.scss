@@ -4,7 +4,7 @@
   height: 100%;
 
   &--legend-right {
-    @include media-breakpoint-up(sm) {
+    @include media-breakpoint-up(lg) {
       flex-direction: row;
 
       .graph-legend {
