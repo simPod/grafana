@@ -15,6 +15,7 @@ export const palette = {
   darkBorder1: '#34343B',
   darkBorder2: '#64646B',
 
+  flopBlue: '#2a323c',
   // Dashboard bg / layer 0 (light theme)
   gray90: '#F4F5F5',
   // Card bg / layer 1
