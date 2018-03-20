@@ -72,7 +72,7 @@
       "contrastText": "#000000"
     },
     "background": {
-      "canvas": "#111217",
+      "canvas": "#2a323c",
       "primary": "#181b1f",
       "secondary": "#22252b"
     },
@@ -116,7 +116,7 @@
       "borderColor": "rgba(204, 204, 220, 0.15)",
       "borderHover": "rgba(204, 204, 220, 0.25)",
       "text": "rgb(204, 204, 220)",
-      "background": "#111217"
+      "background": "#2a323c"
     },
     "panel": {
       "padding": 1,
@@ -126,14 +126,14 @@
       "boxShadow": "none"
     },
     "dropdown": {
-      "background": "#111217"
+      "background": "#2a323c"
     },
     "tooltip": {
       "background": "#22252b",
       "text": "rgb(204, 204, 220)"
     },
     "dashboard": {
-      "background": "#111217",
+      "background": "#2a323c",
       "padding": 1
     },
     "overlay": {
@@ -662,7 +662,7 @@
       "bg1": "#181b1f",
       "bg2": "#22252b",
       "bg3": "rgba(204, 204, 220, 0.16)",
-      "dashboardBg": "#111217",
+      "dashboardBg": "#2a323c",
       "bgBlue1": "#3D71D9",
       "bgBlue2": "rgb(90, 134, 222)",
       "border1": "rgba(204, 204, 220, 0.07)",
@@ -670,7 +670,7 @@
       "border3": "rgba(204, 204, 220, 0.25)",
       "formLabel": "rgb(204, 204, 220)",
       "formDescription": "rgba(204, 204, 220, 0.65)",
-      "formInputBg": "#111217",
+      "formInputBg": "#2a323c",
       "formInputBgDisabled": "rgba(204, 204, 220, 0.04)",
       "formInputBorder": "rgba(204, 204, 220, 0.15)",
       "formInputBorderHover": "rgba(204, 204, 220, 0.25)",
@@ -689,12 +689,12 @@
       "textWeak": "rgba(204, 204, 220, 0.65)",
       "textFaint": "rgba(204, 204, 220, 0.6)",
       "textBlue": "#6E9FFF",
-      "bodyBg": "#111217",
+      "bodyBg": "#2a323c",
       "panelBg": "#181b1f",
       "panelBorder": "rgba(204, 204, 220, 0.07)",
-      "pageHeaderBg": "#111217",
-      "pageHeaderBorder": "#111217",
-      "dropdownBg": "#111217",
+      "pageHeaderBg": "#2a323c",
+      "pageHeaderBorder": "#2a323c",
+      "dropdownBg": "#2a323c",
       "dropdownShadow": "#000000",
       "dropdownOptionHoverBg": "#22252b",
       "link": "rgb(204, 204, 220)",
