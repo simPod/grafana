@@ -32,13 +32,14 @@ const basicColors = {
   variable: '#32d1df',
   orange: '#eb7b18',
   orangeDark: '#ff780a',
+  flopBg: '#2a323c',
 };
 
 const backgrounds = {
   bg1: basicColors.gray10,
   bg2: basicColors.gray15,
   bg3: basicColors.gray25,
-  dashboardBg: basicColors.gray05,
+  dashboardBg: basicColors.flopBg,
   bgBlue1: basicColors.blue80,
   bgBlue2: basicColors.blue77,
 };
@@ -112,7 +113,7 @@ const darkTheme: GrafanaTheme = {
     ...form,
     ...textColors,
 
-    bodyBg: backgrounds.bg1,
+    bodyBg: backgrounds.dashboardBg,
     panelBg: backgrounds.bg1,
     pageHeaderBg: backgrounds.bg2,
     pageHeaderBorder: borders.border1,

@@ -86,9 +86,9 @@ $critical: #e02f44;
 
 // Scaffolding
 // -------------------------
-$body-bg: #141619;
-$page-bg: #141619;
-$dashboard-bg: #0b0c0e;
+$body-bg: #2a323c;
+$page-bg: #2a323c;
+$dashboard-bg: #2a323c;
 
 $text-color-strong: #f7f8fa;
 $text-color: #c7d0d9;
@@ -148,8 +148,8 @@ $card-background-hover: #25272b;
 $card-shadow: none;
 
 // Lists
-$list-item-bg: $card-background;
-$list-item-hover-bg: $card-background-hover;
+$list-item-bg: rgba($card-background, 0.2);
+$list-item-hover-bg: lighten($dark-9, 2%);
 $list-item-shadow: $card-shadow;
 
 $empty-list-cta-bg: #202226;
@@ -161,7 +161,7 @@ $scrollbarBorder: black;
 
 // Tables
 // -------------------------
-$table-bg-accent: #191b1e; // for striping
+$table-bg-accent: inherit; // for striping
 $table-border: $dark-6; // table and cell border
 
 $table-bg-odd: $dark-3;
@@ -201,7 +201,7 @@ $btn-active-box-shadow: 0px 0px 4px rgba(255, 120, 10, 0.5);
 
 // Forms
 // -------------------------
-$input-bg: $input-black;
+$input-bg: rgba($input-black, 0.2);
 $input-bg-disabled: $dark-6;
 
 $input-color: #c7d0d9;

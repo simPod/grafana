@@ -146,8 +146,8 @@ $card-background-hover: ${styleMixins.hoverColor(theme.colors.bg2, theme)};
 $card-shadow: none;
 
 // Lists
-$list-item-bg: $card-background;
-$list-item-hover-bg: $card-background-hover;
+$list-item-bg: rgba($card-background, 0.2);
+$list-item-hover-bg: lighten($dark-9, 2%);
 $list-item-shadow: $card-shadow;
 
 $empty-list-cta-bg: ${theme.colors.bg2};
@@ -159,7 +159,7 @@ $scrollbarBorder: black;
 
 // Tables
 // -------------------------
-$table-bg-accent: ${styleMixins.hoverColor(theme.colors.bg1, theme)}; // for striping
+$table-bg-accent: inherit; // for striping
 $table-border: $dark-6; // table and cell border
 
 $table-bg-odd: $dark-3;
@@ -199,7 +199,7 @@ $btn-active-box-shadow: 0px 0px 4px rgba(255, 120, 10, 0.5);
 
 // Forms
 // -------------------------
-$input-bg: $input-black;
+$input-bg: rgba($input-black, 0.2);
 $input-bg-disabled: $dark-6;
 
 $input-color: ${theme.colors.formInputText};
