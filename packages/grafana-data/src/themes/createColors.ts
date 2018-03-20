@@ -140,7 +140,7 @@ class DarkColors implements ThemeColorsBase<Partial<ThemeRichColor>> {
   };
 
   background = {
-    canvas: palette.gray05,
+    canvas: '#0a0a0a',
     primary: palette.gray10,
     secondary: palette.gray15,
   };
