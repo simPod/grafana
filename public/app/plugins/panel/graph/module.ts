@@ -206,6 +206,8 @@ export class GraphCtrl extends MetricsPanelCtrl {
 
     this.dataWarning = this.getDataWarning();
 
+    this.render(this.seriesList);
+
     this.alertState = undefined;
     (this.seriesList as any).alertState = undefined;
     if (this.panelData!.alertState) {
