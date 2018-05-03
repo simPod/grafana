@@ -229,6 +229,8 @@ export class GraphCtrl extends MetricsPanelCtrl {
 
     this.dataWarning = this.getDataWarning();
 
+    this.render(this.seriesList);
+
     this.annotationsPromise.then(
       (result: { alertState: any; annotations: any }) => {
         this.loading = false;
