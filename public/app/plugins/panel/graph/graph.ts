@@ -60,6 +60,7 @@ class GraphElement {
   panel: any;
   plot: any;
   sortedSeries?: any[];
+  unsortedSeries: any[];
   data: any[];
   panelWidth: number;
   eventManager: EventManager;
@@ -80,7 +81,7 @@ class GraphElement {
     this.timeRegionManager = new TimeRegionManager(this.ctrl);
     // @ts-ignore
     this.tooltip = new GraphTooltip(this.elem, this.ctrl.dashboard, this.scope, () => {
-      return this.sortedSeries;
+      return this.unsortedSeries;
     });
 
     // panel events
@@ -462,6 +463,7 @@ class GraphElement {
     this.timeRegionManager.addFlotOptions(options, this.panel);
     this.eventManager.addFlotEvents(this.annotations, options);
     this.sortedSeries = this.sortSeries(this.data, this.panel);
+    this.unsortedSeries = this.data;
     this.callPlot(options, true);
   }
 
