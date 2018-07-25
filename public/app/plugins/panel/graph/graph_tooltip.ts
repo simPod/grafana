@@ -200,10 +200,11 @@ export default function GraphTooltip(this: any, elem: any, dashboard: any, scope
 
   this.show = (pos: any, item: any) => {
     const plot = elem.data().plot;
-    const plotData = plot.getData();
     const xAxes = plot.getXAxes();
     const xMode = xAxes[0].options.mode;
     const seriesList = getSeriesFn();
+    const sortOrder = seriesList.map((series: any) => series.label);
+    const plotData = plot.getData().sort((a: any, b: any) => sortOrder.indexOf(a.label) - sortOrder.indexOf(b.label));
     let allSeriesMode = panel.tooltip.shared;
     let group, value, absoluteTime, hoverInfo, i, series, seriesHtml, tooltipFormat;
 
