@@ -257,7 +257,7 @@ export const DashNav = React.memo<Props>((props) => {
     }
 
     if (kioskMode === KioskMode.TV) {
-      return [renderTimeControls(), tvButton];
+      return [renderTimeControls()];
     }
 
     if (canEdit && !isFullscreen) {
@@ -323,7 +323,7 @@ export const DashNav = React.memo<Props>((props) => {
     window.location.href = textUtil.sanitizeUrl(snapshotUrl);
   };
 
-  const { isFullscreen, title, folderTitle } = props;
+  const { isFullscreen, title, folderTitle, kioskMode } = props;
   // this ensures the component rerenders when the location changes
   const location = useLocation();
   const titleHref = locationUtil.getUrlForPartial(location, { search: 'open' });
@@ -346,6 +346,7 @@ export const DashNav = React.memo<Props>((props) => {
 
   return (
     <PageToolbar
+      kioskMode={kioskMode}
       pageIcon={isFullscreen ? undefined : 'apps'}
       title={title}
       parent={folderTitle}

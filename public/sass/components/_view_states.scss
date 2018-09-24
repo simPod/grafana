@@ -2,8 +2,7 @@
   .react-resizable-handle,
   .add-row-panel-hint,
   .dash-row-menu-container,
-  .panel-info-corner--info,
-  .panel-info-corner--links {
+  .panel-info-corner--info {
     display: none;
   }
 }
@@ -45,8 +44,7 @@
 .view-mode--kiosk {
   @extend .view-mode--tv;
 
-  .sidemenu,
-  .page-toolbar {
+  .sidemenu {
     display: none;
   }
 
