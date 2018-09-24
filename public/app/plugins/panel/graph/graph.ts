@@ -140,9 +140,9 @@ class GraphElement {
       return;
     }
 
-    const { values, min, max, avg, current, total, p95 } = this.panel.legend;
+    const { values, min, max, avg, current, total, p95, show } = this.panel.legend;
     const { alignAsTable, rightSide, sideWidth, sort, sortDesc, hideEmpty, hideZero } = this.panel.legend;
-    const legendOptions = { alignAsTable, rightSide, sideWidth, sort, sortDesc, hideEmpty, hideZero };
+    const legendOptions = { alignAsTable, rightSide, sideWidth, sort, sortDesc, hideEmpty, hideZero, show };
     const valueOptions = { values, min, max, avg, current, total, p95 };
     const legendProps: GraphLegendProps = {
       seriesList: this.data,
@@ -588,6 +588,13 @@ class GraphElement {
       gridColor = '#a1a1a1';
     }
     const stack = panel.stack ? true : null;
+
+    const needsSideMargin =
+      document.documentElement.clientWidth > 768 &&
+      panel.legend.rightSide &&
+      panel.legend.show &&
+      (panel.yaxes[1]?.show ?? false) === true;
+
     const options: any = {
       hooks: {
         draw: [this.drawHook.bind(this)],
@@ -630,6 +637,8 @@ class GraphElement {
       xaxis: {},
       grid: {
         minBorderMargin: 0,
+        minLeftBorderMargin: needsSideMargin ? 60 : 0,
+        minRightBorderMargin: needsSideMargin ? 90 : 0,
         markings: [],
         backgroundColor: null,
         borderWidth: 0,
