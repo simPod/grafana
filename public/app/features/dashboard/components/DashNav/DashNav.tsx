@@ -364,6 +364,18 @@ export const DashNav = memo<Props>((props) => {
     return buttons;
   };
 
+  if (props.kioskMode === KioskMode.Full) {
+    return (
+      <AppChromeUpdate
+        actions={
+          <>
+            <ToolbarButtonRow alignment="right">{renderTimeControls()}</ToolbarButtonRow>
+          </>
+        }
+      />
+    );
+  }
+
   return (
     <AppChromeUpdate
       actions={

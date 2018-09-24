@@ -4,6 +4,7 @@ import { memo, Children, ReactNode } from 'react';
 import { GrafanaTheme2 } from '@grafana/data';
 import { selectors } from '@grafana/e2e-selectors';
 
+import { KioskMode } from '../../../../../public/app/types';
 import { useStyles2 } from '../../themes/ThemeContext';
 import { getFocusStyles } from '../../themes/mixins';
 import { IconName } from '../../types';
@@ -13,6 +14,7 @@ import { Link } from '../Link/Link';
 import { ToolbarButtonRow } from '../ToolbarButton/ToolbarButtonRow';
 
 export interface Props {
+  kioskMode?: KioskMode | null;
   pageIcon?: IconName;
   title?: string;
   section?: string;
@@ -36,6 +38,7 @@ export interface Props {
 /** @alpha */
 export const PageToolbar = memo(
   ({
+    kioskMode,
     title,
     section,
     parent,
@@ -80,7 +83,7 @@ export const PageToolbar = memo(
     return (
       <nav className={mainStyle} aria-label={ariaLabel}>
         <div className={styles.leftWrapper}>
-          {pageIcon && !onGoBack && (
+          {kioskMode !== KioskMode.TV && pageIcon && !onGoBack && (
             <div className={styles.pageIcon}>
               <Icon name={pageIcon} size="lg" aria-hidden />
             </div>
@@ -98,7 +101,7 @@ export const PageToolbar = memo(
             </div>
           )}
           <nav aria-label="Search links" className={styles.navElement}>
-            {parent && parentHref && (
+            {kioskMode !== KioskMode.TV && parent && parentHref && (
               <>
                 <Link
                   aria-label={`Search dashboard in the ${parent} folder`}
@@ -115,7 +118,7 @@ export const PageToolbar = memo(
               </>
             )}
 
-            {(title || Boolean(leftItems?.length)) && (
+            {kioskMode !== KioskMode.TV && (title || Boolean(leftItems?.length)) && (
               <div className={styles.titleWrapper}>
                 {title && (
                   <h1 className={styles.h1Styles}>
