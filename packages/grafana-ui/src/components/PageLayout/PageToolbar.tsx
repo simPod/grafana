@@ -5,6 +5,7 @@ import { GrafanaTheme2 } from '@grafana/data';
 import { selectors } from '@grafana/e2e-selectors';
 
 import { Link } from '..';
+import { KioskMode } from '../../../../../public/app/types';
 import { styleMixins } from '../../themes';
 import { useStyles2 } from '../../themes/ThemeContext';
 import { getFocusStyles } from '../../themes/mixins';
@@ -13,6 +14,7 @@ import { Icon } from '../Icon/Icon';
 import { IconButton } from '../IconButton/IconButton';
 
 export interface Props {
+  kioskMode?: KioskMode;
   pageIcon?: IconName;
   title?: string;
   parent?: string;
@@ -29,6 +31,7 @@ export interface Props {
 /** @alpha */
 export const PageToolbar: FC<Props> = React.memo(
   ({
+    kioskMode,
     title,
     parent,
     pageIcon,
@@ -61,7 +64,7 @@ export const PageToolbar: FC<Props> = React.memo(
 
     return (
       <nav className={mainStyle} aria-label={ariaLabel}>
-        {pageIcon && !onGoBack && (
+        {kioskMode !== KioskMode.TV && pageIcon && !onGoBack && (
           <div className={styles.pageIcon}>
             <Icon name={pageIcon} size="lg" aria-hidden />
           </div>
@@ -80,7 +83,7 @@ export const PageToolbar: FC<Props> = React.memo(
           </div>
         )}
         <nav aria-label="Search links" className={styles.navElement}>
-          {parent && parentHref && (
+          {kioskMode !== KioskMode.TV && parent && parentHref && (
             <>
               <Link
                 aria-label={`Search dashboard in the ${parent} folder`}
@@ -97,7 +100,7 @@ export const PageToolbar: FC<Props> = React.memo(
             </>
           )}
 
-          {title && titleHref && (
+          {kioskMode !== KioskMode.TV && title && titleHref && (
             <h1 className={styles.h1Styles}>
               <Link
                 aria-label="Search dashboard by name"
