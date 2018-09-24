@@ -9,7 +9,6 @@ import { useGrafana } from 'app/core/context/GrafanaContext';
 import { useMediaQueryChange } from 'app/core/hooks/useMediaQueryChange';
 import store from 'app/core/store';
 import { CommandPalette } from 'app/features/commandPalette/CommandPalette';
-import { KioskMode } from 'app/types';
 
 import { AppChromeMenu } from './AppChromeMenu';
 import { DOCKED_LOCAL_STORAGE_KEY, DOCKED_MENU_OPEN_LOCAL_STORAGE_KEY } from './AppChromeService';
@@ -24,7 +23,7 @@ export interface Props extends PropsWithChildren<{}> {}
 export function AppChrome({ children }: Props) {
   const { chrome } = useGrafana();
   const state = chrome.useState();
-  const searchBarHidden = state.searchBarHidden || state.kioskMode === KioskMode.TV;
+  const searchBarHidden = state.searchBarHidden || state.kioskMode !== null;
   const theme = useTheme2();
   const styles = useStyles2(getStyles);
 
@@ -81,7 +80,6 @@ export function AppChrome({ children }: Props) {
         'main-view--chrome-hidden': state.chromeless,
       })}
     >
-      {!state.chromeless && (
         <>
           <LinkButton className={styles.skipLink} href="#pageContent">
             Skip to main content
@@ -89,6 +87,7 @@ export function AppChrome({ children }: Props) {
           <header className={cx(styles.topNav)}>
             {!searchBarHidden && <TopSearchBar />}
             <NavToolbar
+              kioskMode={state.kioskMode}
               searchBarHidden={searchBarHidden}
               sectionNav={state.sectionNav.node}
               pageNav={state.pageNav}
@@ -99,7 +98,6 @@ export function AppChrome({ children }: Props) {
             />
           </header>
         </>
-      )}
       <div className={contentClass}>
         <div className={styles.panes}>
           {!state.chromeless && state.megaMenuDocked && state.megaMenuOpen && (
@@ -131,9 +129,7 @@ const getStyles = (theme: GrafanaTheme2) => {
     contentNoSearchBar: css({
       paddingTop: TOP_BAR_LEVEL_HEIGHT,
     }),
-    contentChromeless: css({
-      paddingTop: 0,
-    }),
+    contentChromeless: css(),
     dockedMegaMenu: css({
       background: theme.colors.background.primary,
       borderRight: `1px solid ${theme.colors.border.weak}`,
@@ -150,7 +146,6 @@ const getStyles = (theme: GrafanaTheme2) => {
       zIndex: theme.zIndex.navbarFixed,
       left: 0,
       right: 0,
-      background: theme.colors.background.primary,
       flexDirection: 'column',
     }),
     panes: css({

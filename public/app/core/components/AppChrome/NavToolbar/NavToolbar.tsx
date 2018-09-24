@@ -7,7 +7,7 @@ import { Icon, IconButton, ToolbarButton, useStyles2 } from '@grafana/ui';
 import { useGrafana } from 'app/core/context/GrafanaContext';
 import { t } from 'app/core/internationalization';
 import { HOME_NAV_ID } from 'app/core/reducers/navModel';
-import { useSelector } from 'app/types';
+import { KioskMode, useSelector } from 'app/types';
 
 import { Breadcrumbs } from '../../Breadcrumbs/Breadcrumbs';
 import { buildBreadcrumbs } from '../../Breadcrumbs/utils';
@@ -21,6 +21,7 @@ export interface Props {
   onToggleSearchBar(): void;
   onToggleMegaMenu(): void;
   onToggleKioskMode(): void;
+  kioskMode: KioskMode | null;
   searchBarHidden?: boolean;
   sectionNav: NavModelItem;
   pageNav?: NavModelItem;
@@ -29,6 +30,7 @@ export interface Props {
 
 export function NavToolbar({
   actions,
+  kioskMode,
   searchBarHidden,
   sectionNav,
   pageNav,
@@ -44,25 +46,23 @@ export function NavToolbar({
 
   return (
     <div data-testid={Components.NavToolbar.container} className={styles.pageToolbar}>
-      <div className={styles.menuButton}>
-        <IconButton
-          id={TOGGLE_BUTTON_ID}
-          name="bars"
-          tooltip={
-            state.megaMenuOpen
+      {kioskMode === null && (
+        <div className={styles.menuButton}>
+          <IconButton
+            id={TOGGLE_BUTTON_ID}name="bars"
+            tooltip={state.megaMenuOpen
               ? t('navigation.toolbar.close-menu', 'Close menu')
-              : t('navigation.toolbar.open-menu', 'Open menu')
-          }
-          tooltipPlacement="bottom"
-          size="xl"
-          onClick={onToggleMegaMenu}
-          data-testid={Components.NavBar.Toggle.button}
-        />
-      </div>
-      <Breadcrumbs breadcrumbs={breadcrumbs} className={styles.breadcrumbsWrapper} />
+              : t('navigation.toolbar.open-menu', 'Open menu')}
+            tooltipPlacement="bottom"
+            size="xl"
+            onClick={onToggleMegaMenu}data-testid={Components.NavBar.Toggle.button}
+          />
+        </div>
+      )}
+      {kioskMode === null && <Breadcrumbs breadcrumbs={breadcrumbs} className={styles.breadcrumbsWrapper} />}
       <div className={styles.actions}>
         {actions}
-        {searchBarHidden && (
+        {kioskMode === null && searchBarHidden && (
           <ToolbarButton
             onClick={onToggleKioskMode}
             narrow
@@ -70,14 +70,16 @@ export function NavToolbar({
             icon="monitor"
           />
         )}
-        {actions && <NavToolbarSeparator />}
-        <ToolbarButton
-          onClick={onToggleSearchBar}
-          narrow
-          title={t('navigation.toolbar.toggle-search-bar', 'Toggle top search bar')}
-        >
-          <Icon name={searchBarHidden ? 'angle-down' : 'angle-up'} size="xl" />
-        </ToolbarButton>
+        {kioskMode === null && actions && <NavToolbarSeparator />}
+        {kioskMode === null && (
+          <ToolbarButton
+            onClick={onToggleSearchBar}
+            narrow
+            title={t('navigation.toolbar.toggle-search-bar', 'Toggle top search bar')}
+          >
+            <Icon name={searchBarHidden ? 'angle-down' : 'angle-up'} size="xl" />
+          </ToolbarButton>
+        )}
       </div>
     </div>
   );
@@ -97,7 +99,7 @@ const getStyles = (theme: GrafanaTheme2) => {
       display: 'flex',
       padding: theme.spacing(0, 1, 0, 2),
       alignItems: 'center',
-      borderBottom: `1px solid ${theme.colors.border.weak}`,
+      // borderBottom: `1px solid ${theme.colors.border.weak}`,
     }),
     menuButton: css({
       display: 'flex',
