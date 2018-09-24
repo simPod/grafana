@@ -1546,6 +1546,8 @@ Licensed under the MIT license.
             // possibly adjust plot offset to ensure everything stays
             // inside the canvas and isn't clipped off
 
+            const minLeftMargin = options.grid.minLeftBorderMargin;
+            const minRightMargin = options.grid.minRightBorderMargin;
             var minMargin = options.grid.minBorderMargin,
                 axis, i;
 
@@ -1559,8 +1561,8 @@ Licensed under the MIT license.
             }
 
             var margins = {
-                left: minMargin,
-                right: minMargin,
+                left: minLeftMargin,
+                right: minRightMargin,
                 top: minMargin,
                 bottom: minMargin
             };
