@@ -640,7 +640,7 @@ class GraphElement {
         minBorderMargin: 0,
         minLeftBorderMargin: needsSideMargin ? 60 : 0,
         minRightBorderMargin: needsSideMargin ? 90 : 0,
-        markings: [],
+        markings: [{ yaxis: { from: 0, to: 0 }, color: '#fff' }],
         backgroundColor: null,
         borderWidth: 0,
         hoverable: true,
