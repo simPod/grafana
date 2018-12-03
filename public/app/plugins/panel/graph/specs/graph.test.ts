@@ -8,6 +8,7 @@ import $ from 'jquery';
 import { graphDirective, GraphElement } from '../graph';
 import { dateTime, EventBusSrv } from '@grafana/data';
 import { DashboardModel } from '../../../../features/dashboard/state';
+import { TemplateSrvStub } from '../../../../../test/specs/helpers';
 
 jest.mock('app/features/annotations/all', () => ({
   EventManager: () => {
@@ -117,12 +118,19 @@ describe('grafanaGraph', () => {
       })
     );
 
+    const templateSrv = new TemplateSrvStub();
     ctrl = new GraphCtrl(
       {
         $on: () => {},
       },
       {
-        get: () => {},
+        get: (name: string) => {
+          switch (name) {
+            case 'templateSrv':
+              return templateSrv;
+            default:
+          }
+        },
       } as any,
       {} as any
     );
