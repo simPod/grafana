@@ -9,7 +9,7 @@ import 'vendor/flot/jquery.flot.dashes';
 import './jquery.flot.events';
 
 import $ from 'jquery';
-import { clone, find, flatten, isUndefined, map, max as _max, min as _min, sortBy as _sortBy, toNumber } from 'lodash';
+import { clone, find, flatten, isNil, isUndefined, map, max as _max, min as _min, sortBy as _sortBy, toNumber } from 'lodash';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
@@ -855,11 +855,11 @@ class GraphElement {
   }
 
   parseNumber(value: any) {
-    if (value === null || typeof value === 'undefined') {
+    if (isNil(value)) {
       return null;
     }
 
-    return toNumber(value);
+    return toNumber(this.ctrl.templateSrv.replace(value, this.ctrl.panel.scopedVars));
   }
 
   applyLogScale(axis: any, data: any) {
