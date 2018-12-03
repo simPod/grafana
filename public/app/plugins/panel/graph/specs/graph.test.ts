@@ -6,6 +6,8 @@ import { PanelCtrl } from 'app/angular/panel/panel_ctrl';
 import config from 'app/core/config';
 import TimeSeries from 'app/core/time_series2';
 
+
+import { TemplateSrvStub } from '../../../../../test/specs/helpers';
 import { DashboardModel } from '../../../../features/dashboard/state';
 import { graphDirective, GraphElement } from '../graph';
 import { GraphCtrl } from '../module';
@@ -117,6 +119,8 @@ describe('grafanaGraph', () => {
       })
     );
 
+    // @ts-ignore
+    const templateSrv = new TemplateSrvStub();
     ctrl = new GraphCtrl(
       {
         $on: () => {},
@@ -126,7 +130,13 @@ describe('grafanaGraph', () => {
         },
       },
       {
-        get: () => {},
+        get: (name: string) => {
+          switch (name) {
+            case 'templateSrv':
+              return templateSrv;
+            default:
+          }
+        },
       } as any
     );
 
