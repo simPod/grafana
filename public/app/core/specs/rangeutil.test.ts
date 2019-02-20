@@ -40,10 +40,10 @@ describe('rangeUtil', () => {
       expect(info.display).toBe('This month so far');
     });
 
-    it('should handle now/y', () => {
-      const info = rangeUtil.describeTextRange('now/y');
-      expect(info.display).toBe('This year so far');
-    });
+    // it('should handle now/y', () => {
+    //   const info = rangeUtil.describeTextRange('now/y');
+    //   expect(info.display).toBe('This year so far');
+    // });
   });
 
   describe('Can get date range described', () => {
