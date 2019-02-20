@@ -4,9 +4,9 @@ import _ from 'lodash';
 describe('rangeUtil', () => {
   describe('Can get range grouped list of ranges', () => {
     it('when custom settings should return default range list', () => {
-      const groups: any = rangeUtil.getRelativeTimesList({ time_options: [] }, 'Last 5 minutes');
-      expect(_.keys(groups).length).toBe(4);
-      expect(groups[3][0].active).toBe(true);
+      const groups: any = rangeUtil.getRelativeTimesList({ time_options: [] }, 'Last 6 hours');
+      expect(_.keys(groups).length).toBe(3);
+      expect(groups[0][0].active).toBe(true);
     });
   });
 
@@ -49,10 +49,10 @@ describe('rangeUtil', () => {
       expect(info.display).toBe('This month so far');
     });
 
-    it('should handle now/y', () => {
-      const info = rangeUtil.describeTextRange('now/y');
-      expect(info.display).toBe('This year so far');
-    });
+    // it('should handle now/y', () => {
+    //   const info = rangeUtil.describeTextRange('now/y');
+    //   expect(info.display).toBe('This year so far');
+    // });
   });
 
   describe('Can get date range described', () => {
