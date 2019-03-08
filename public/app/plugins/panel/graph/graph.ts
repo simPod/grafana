@@ -90,6 +90,7 @@ class GraphElement {
     this.panel = this.ctrl.panel;
     this.annotations = [];
 
+    this.unsortedSeries = [];
     this.panelWidth = 0;
     this.eventManager = new EventManager(this.ctrl);
     this.thresholdManager = new ThresholdManager(this.ctrl);

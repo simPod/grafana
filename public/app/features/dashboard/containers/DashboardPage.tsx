@@ -6,7 +6,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { GrafanaTheme2, TimeRange } from '@grafana/data';
 import { selectors } from '@grafana/e2e-selectors';
 import { locationService } from '@grafana/runtime';
-import { CustomScrollbar, stylesFactory, Themeable2, withTheme2 } from '@grafana/ui';
+import { stylesFactory, Themeable2, withTheme2 } from '@grafana/ui';
 import { notifyApp } from 'app/core/actions';
 import { Branding } from 'app/core/components/Branding/Branding';
 import { createErrorNotification } from 'app/core/copy/appNotification';
@@ -313,7 +313,7 @@ export class UnthemedDashboardPage extends PureComponent<Props, State> {
 
   render() {
     const { dashboard, initError, queryParams, theme } = this.props;
-    const { editPanel, viewPanel, updateScrollTop } = this.state;
+    const { editPanel, viewPanel } = this.state;
     const kioskMode = getKioskMode();
     const styles = getStyles(theme, kioskMode);
 
@@ -345,25 +345,15 @@ export class UnthemedDashboardPage extends PureComponent<Props, State> {
 
         <DashboardPrompt dashboard={dashboard} />
 
-        <div className={styles.dashboardScroll}>
-          <CustomScrollbar
-            autoHeightMin="100%"
-            scrollRefCallback={this.setScrollRef}
-            scrollTop={updateScrollTop}
-            hideHorizontalTrack={true}
-            updateAfterMountMs={500}
-          >
-            <div className={styles.dashboardContent}>
-              {initError && <DashboardFailed />}
-              {showSubMenu && (
-                <section aria-label={selectors.pages.Dashboard.SubMenu.submenu}>
-                  <SubMenu dashboard={dashboard} annotations={dashboard.annotations.list} links={dashboard.links} />
-                </section>
-              )}
+        <div className={styles.dashboardContent}>
+          {initError && <DashboardFailed />}
+          {showSubMenu && (
+            <section aria-label={selectors.pages.Dashboard.SubMenu.submenu}>
+              <SubMenu dashboard={dashboard} annotations={dashboard.annotations.list} links={dashboard.links} />
+            </section>
+          )}
 
-              <DashboardGrid dashboard={dashboard} viewPanel={viewPanel} editPanel={editPanel} />
-            </div>
-          </CustomScrollbar>
+          <DashboardGrid dashboard={dashboard} viewPanel={viewPanel} editPanel={editPanel} />
         </div>
 
         {inspectPanel && <PanelInspector dashboard={dashboard} panel={inspectPanel} />}
