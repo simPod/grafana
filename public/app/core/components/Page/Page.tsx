@@ -6,8 +6,6 @@ import { config } from '@grafana/runtime';
 import { useStyles2 } from '@grafana/ui';
 import { useGrafana } from 'app/core/context/GrafanaContext';
 
-import NativeScrollbar from '../NativeScrollbar';
-
 import { PageContents } from './PageContents';
 import { PageHeader } from './PageHeader';
 import { PageTabs } from './PageTabs';
@@ -27,7 +25,6 @@ export const Page: PageType = ({
   className,
   info,
   layout = PageLayoutType.Standard,
-  onSetScrollRef,
   ...otherProps
 }) => {
   const styles = useStyles2(getStyles);
@@ -53,36 +50,24 @@ export const Page: PageType = ({
   return (
     <div className={cx(styles.wrapper, className)} {...otherProps}>
       {layout === PageLayoutType.Standard && (
-        <NativeScrollbar
-          // This id is used by the image renderer to scroll through the dashboard
-          divId="page-scrollbar"
-          onSetScrollRef={onSetScrollRef}
-        >
-          <div className={styles.pageInner}>
-            {pageHeaderNav && (
-              <PageHeader
-                actions={actions}
-                onEditTitle={onEditTitle}
-                navItem={pageHeaderNav}
-                renderTitle={renderTitle}
-                info={info}
-                subTitle={subTitle}
-              />
-            )}
-            {pageNav && pageNav.children && <PageTabs navItem={pageNav} />}
-            <div className={styles.pageContent}>{children}</div>
-          </div>
-        </NativeScrollbar>
+        <div className={styles.pageInner}>
+          {pageHeaderNav && (
+            <PageHeader
+              actions={actions}
+              onEditTitle={onEditTitle}
+              navItem={pageHeaderNav}
+              renderTitle={renderTitle}
+              info={info}
+              subTitle={subTitle}
+            />
+          )}
+          {pageNav && pageNav.children && <PageTabs navItem={pageNav} />}
+          <div className={styles.pageContent}>{children}</div>
+        </div>
       )}
 
       {layout === PageLayoutType.Canvas && (
-        <NativeScrollbar
-          // This id is used by the image renderer to scroll through the dashboard
-          divId="page-scrollbar"
-          onSetScrollRef={onSetScrollRef}
-        >
-          <div className={styles.canvasContent}>{children}</div>
-        </NativeScrollbar>
+        <div className={styles.canvasContent}>{children}</div>
       )}
 
       {layout === PageLayoutType.Custom && children}
