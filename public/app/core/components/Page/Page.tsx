@@ -4,7 +4,7 @@ import React from 'react';
 
 import { GrafanaTheme2, PageLayoutType } from '@grafana/data';
 import { config } from '@grafana/runtime';
-import { CustomScrollbar, useStyles2 } from '@grafana/ui';
+import { useStyles2 } from '@grafana/ui';
 
 import { Footer } from '../Footer/Footer';
 import { PageHeader } from '../PageHeader/PageHeader';
@@ -23,8 +23,6 @@ export const OldPage: PageType = ({
   children,
   className,
   toolbar,
-  scrollRef,
-  scrollTop,
   layout = PageLayoutType.Standard,
   subTitle,
   ...otherProps
@@ -39,22 +37,16 @@ export const OldPage: PageType = ({
   return (
     <div className={cx(styles.wrapper, className)} {...otherProps}>
       {layout === PageLayoutType.Standard && (
-        <CustomScrollbar autoHeightMin={'100%'} scrollTop={scrollTop} scrollRefCallback={scrollRef}>
-          <div className={cx('page-scrollbar-content', className)}>
-            {pageHeaderNav && <PageHeader navItem={pageHeaderNav} />}
-            {children}
-            <Footer />
-          </div>
-        </CustomScrollbar>
+        <>
+          {pageHeaderNav && <PageHeader navItem={pageHeaderNav} />}
+          {children}
+          <Footer />
+        </>
       )}
       {layout === PageLayoutType.Canvas && (
         <>
           {toolbar}
-          <div className={styles.scrollWrapper}>
-            <CustomScrollbar autoHeightMin={'100%'} scrollTop={scrollTop} scrollRefCallback={scrollRef}>
-              <div className={cx(styles.content, !toolbar && styles.contentWithoutToolbar)}>{children}</div>
-            </CustomScrollbar>
-          </div>
+          <div className={cx(styles.content, !toolbar && styles.contentWithoutToolbar)}>{children}</div>
         </>
       )}
       {layout === PageLayoutType.Custom && (
