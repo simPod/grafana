@@ -297,7 +297,7 @@ export class UnthemedDashboardPage extends PureComponent<Props, State> {
 
   render() {
     const { dashboard, initError, queryParams } = this.props;
-    const { editPanel, viewPanel, updateScrollTop, pageNav, sectionNav } = this.state;
+    const { editPanel, viewPanel, pageNav, sectionNav } = this.state;
     const kioskMode = getKioskMode(this.props.queryParams);
 
     if (!dashboard || !pageNav || !sectionNav) {
@@ -373,8 +373,6 @@ export class UnthemedDashboardPage extends PureComponent<Props, State> {
           pageNav={pageNav}
           layout={PageLayoutType.Canvas}
           className={pageClassName}
-          scrollRef={this.setScrollRef}
-          scrollTop={updateScrollTop}
         >
           {showToolbar && (
             <header data-testid={selectors.pages.Dashboard.DashNav.navV2}>
