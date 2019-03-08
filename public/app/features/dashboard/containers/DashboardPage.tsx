@@ -13,7 +13,7 @@ import { DashboardGrid } from '../dashgrid/DashboardGrid';
 import { DashNav } from '../components/DashNav';
 import { DashboardSettings } from '../components/DashboardSettings';
 import { PanelEditor } from '../components/PanelEditor/PanelEditor';
-import { Alert, Button, CustomScrollbar, HorizontalGroup, Spinner, VerticalGroup } from '@grafana/ui';
+import { Alert, Button, HorizontalGroup, Spinner, VerticalGroup } from '@grafana/ui';
 // Redux
 import { initDashboard } from '../state/initDashboard';
 import { notifyApp, updateLocation } from 'app/core/actions';
@@ -109,6 +109,8 @@ export class DashboardPage extends PureComponent<Props, State> {
       document.title = dashboard.title + ' - ' + Branding.AppTitle;
     }
 
+    (window as any).setScrollTopRemote = this.setScrollTopRemote;
+
     // Due to the angular -> react url bridge we can ge an update here with new uid before the container unmounts
     // Can remove this condition after we switch to react router
     if (prevProps.urlUid !== urlUid) {
@@ -203,6 +205,10 @@ export class DashboardPage extends PureComponent<Props, State> {
     this.setState({ scrollTop: target.scrollTop, updateScrollTop: undefined });
   };
 
+  setScrollTopRemote = (scrollTop: number): void => {
+    this.setState({ scrollTop: scrollTop });
+  };
+
   onAddPanel = () => {
     const { dashboard } = this.props;
 
@@ -292,7 +298,7 @@ export class DashboardPage extends PureComponent<Props, State> {
       updateLocation,
     } = this.props;
 
-    const { editPanel, viewPanel, scrollTop, updateScrollTop } = this.state;
+    const { editPanel, viewPanel, scrollTop } = this.state;
 
     if (!dashboard) {
       if (isInitSlow) {
@@ -309,29 +315,19 @@ export class DashboardPage extends PureComponent<Props, State> {
       <div className="dashboard-container">
         <DashNav dashboard={dashboard} isFullscreen={!!viewPanel} $injector={$injector} onAddPanel={this.onAddPanel} />
 
-        <div className="dashboard-scroll">
-          <CustomScrollbar
-            autoHeightMin="100%"
-            setScrollTop={this.setScrollTop}
-            scrollTop={updateScrollTop}
-            hideHorizontalTrack={true}
-            updateAfterMountMs={500}
-          >
-            <div className="dashboard-content">
-              {initError && this.renderInitFailedState()}
-              {!editPanel && (
-                <SubMenu dashboard={dashboard} annotations={dashboard.annotations.list} links={dashboard.links} />
-              )}
+        <div className="dashboard-content">
+          {initError && this.renderInitFailedState()}
+          {!editPanel && (
+            <SubMenu dashboard={dashboard} annotations={dashboard.annotations.list} links={dashboard.links} />
+          )}
 
-              <DashboardGrid
-                dashboard={dashboard}
-                viewPanel={viewPanel}
-                editPanel={editPanel}
-                scrollTop={approximateScrollTop}
-                isPanelEditorOpen={isPanelEditorOpen}
-              />
-            </div>
-          </CustomScrollbar>
+          <DashboardGrid
+            dashboard={dashboard}
+            viewPanel={viewPanel}
+            editPanel={editPanel}
+            scrollTop={approximateScrollTop}
+            isPanelEditorOpen={isPanelEditorOpen}
+          />
         </div>
 
         {inspectPanel && <PanelInspector dashboard={dashboard} panel={inspectPanel} defaultTab={inspectTab} />}

@@ -210,7 +210,8 @@ export class DashboardGrid extends PureComponent<Props> {
 
     // Use the whole browser height (larger than real value)
     // TODO? is there a better way
-    const viewHeight = isNaN(window.innerHeight) ? (window as any).clientHeight : window.innerHeight;
+    // const viewHeight = isNaN(window.innerHeight) ? (window as any).clientHeight : window.innerHeight;
+    const viewHeight = parent.window.innerHeight;
     const viewBot = viewTop + viewHeight;
     if (top > viewBot + buffer) {
       return false;
