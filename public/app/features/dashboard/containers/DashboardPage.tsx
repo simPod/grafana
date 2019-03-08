@@ -378,7 +378,6 @@ export class UnthemedDashboardPage extends PureComponent<Props, State> {
           pageNav={pageNav}
           layout={PageLayoutType.Canvas}
           className={pageClassName}
-          onSetScrollRef={this.setScrollRef}
         >
           {showToolbar && (
             <header data-testid={selectors.pages.Dashboard.DashNav.navV2}>
