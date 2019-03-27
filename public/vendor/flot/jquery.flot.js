@@ -1678,9 +1678,17 @@ Licensed under the MIT license.
 
         function setRange(axis) {
             var opts = axis.options,
-                min = +(opts.min != null ? opts.min : axis.datamin),
-                max = +(opts.max != null ? opts.max : axis.datamax),
+                min = +axis.datamin,
+                max = +axis.datamax,
                 delta = max - min;
+
+            if (opts.min != null && min < opts.min) {
+              min = opts.min;
+            }
+            if (opts.min != null && max > opts.max) {
+              max = opts.max;
+            }
+
 
             if (delta == 0.0) {
                 // Grafana fix: wide Y min and max using increased wideFactor
@@ -1905,6 +1913,16 @@ Licensed under the MIT license.
                     label = axis.tickFormatter(v, axis);
                 if (!isNaN(v))
                     axis.ticks.push({ v: v, label: label });
+            }
+
+            if (axis.direction === 'y') {
+              if (axis.options.min !== null) {
+                axis.min = Math.floor(axis.min / axis.tickSize) * axis.tickSize;
+              }
+
+              if (axis.options.max !== null) {
+                axis.max = Math.ceil(axis.max / axis.tickSize) * axis.tickSize;
+              }
             }
         }
 

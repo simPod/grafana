@@ -118,7 +118,7 @@ describe('grafanaGraph', () => {
       })
     );
 
-    const templateSrv = new TemplateSrvStub();
+    const templateSrv = TemplateSrvStub();
     ctrl = new GraphCtrl(
       {
         $on: () => {},
