@@ -659,8 +659,16 @@ class GraphElement {
     const sortDesc = panel.legend.sortDesc === true ? -1 : 1;
 
     if (shouldSortBy) {
+      if (panel.xaxis.mode === 'time') {
+        return _sortBy(series, (s) => s.stats[sortBy] * sortDesc * -1);
+      }
+
       return _sortBy(series, (s) => s.stats[sortBy] * sortDesc);
     } else {
+      if (panel.xaxis.mode === 'time') {
+        return _sortBy(series, (s) => s.zindex).reverse();
+      }
+
       return _sortBy(series, (s) => s.zindex);
     }
   }
