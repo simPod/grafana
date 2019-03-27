@@ -176,8 +176,8 @@ describe('grafanaGraph', () => {
     });
 
     it('should not modify order of time series', () => {
-      expect(ctx.plotData[0].alias).toBe('series1');
-      expect(ctx.plotData[1].alias).toBe('series2');
+      expect(ctx.plotData[0].alias).toBe('series2');
+      expect(ctx.plotData[1].alias).toBe('series1');
     });
   });
 
@@ -193,8 +193,8 @@ describe('grafanaGraph', () => {
       });
     });
     it('highest value should be first', () => {
-      expect(ctx.plotData[0].alias).toBe('series2');
-      expect(ctx.plotData[1].alias).toBe('series1');
+      expect(ctx.plotData[0].alias).toBe('series1');
+      expect(ctx.plotData[1].alias).toBe('series2');
     });
   });
 
@@ -207,8 +207,8 @@ describe('grafanaGraph', () => {
       });
     });
     it('lowest value should be first', () => {
-      expect(ctx.plotData[0].alias).toBe('series1');
-      expect(ctx.plotData[1].alias).toBe('series2');
+      expect(ctx.plotData[0].alias).toBe('series2');
+      expect(ctx.plotData[1].alias).toBe('series1');
     });
   });
 
@@ -222,8 +222,8 @@ describe('grafanaGraph', () => {
     });
 
     it('highest value should be first', () => {
-      expect(ctx.plotData[0].alias).toBe('series1');
-      expect(ctx.plotData[1].alias).toBe('series2');
+      expect(ctx.plotData[0].alias).toBe('series2');
+      expect(ctx.plotData[1].alias).toBe('series1');
     });
   });
 
@@ -240,8 +240,8 @@ describe('grafanaGraph', () => {
     });
 
     it('highest last value should be first', () => {
-      expect(ctx.plotData[0].alias).toBe('series2');
-      expect(ctx.plotData[1].alias).toBe('series1');
+      expect(ctx.plotData[0].alias).toBe('series1');
+      expect(ctx.plotData[1].alias).toBe('series2');
     });
   });
 
@@ -461,8 +461,8 @@ describe('grafanaGraph', () => {
 
     it('should match second series and fill zero, and enable points', () => {
       expect(ctx.plotOptions.series.lines.fill).toBe(0.5);
-      expect(ctx.plotData[1].lines.fill).toBe(0.001);
-      expect(ctx.plotData[1].points.show).toBe(true);
+      expect(ctx.plotData[0].lines.fill).toBe(0.001);
+      expect(ctx.plotData[0].points.show).toBe(true);
     });
   });
 
@@ -475,8 +475,8 @@ describe('grafanaGraph', () => {
     });
 
     it('should move zindex 2 last', () => {
-      expect(ctx.plotData[0].alias).toBe('series2');
-      expect(ctx.plotData[1].alias).toBe('series1');
+      expect(ctx.plotData[0].alias).toBe('series1');
+      expect(ctx.plotData[1].alias).toBe('series2');
     });
   });
 
@@ -488,9 +488,9 @@ describe('grafanaGraph', () => {
     });
 
     it('should remove datapoints and disable stack', () => {
-      expect(ctx.plotData[0].alias).toBe('series1');
-      expect(ctx.plotData[1].data.length).toBe(0);
-      expect(ctx.plotData[1].stack).toBe(false);
+      expect(ctx.plotData[1].alias).toBe('series1');
+      expect(ctx.plotData[0].data.length).toBe(0);
+      expect(ctx.plotData[0].stack).toBe(false);
     });
   });
 
