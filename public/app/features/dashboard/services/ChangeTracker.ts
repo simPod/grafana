@@ -39,16 +39,6 @@ export class ChangeTracker {
       this.originalPath = $location.path();
     });
 
-    $window.onbeforeunload = () => {
-      if (this.ignoreChanges()) {
-        return undefined;
-      }
-      if (this.hasChanges()) {
-        return 'There are unsaved changes to this dashboard';
-      }
-      return undefined;
-    };
-
     scope.$on('$locationChangeStart', (event: any, next: any) => {
       // check if we should look for changes
       if (this.originalPath === $location.path()) {
