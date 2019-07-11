@@ -143,6 +143,7 @@ export class GraphCtrl extends MetricsPanelCtrl {
       // show/hide alert threshold lines and fill
       alertThreshold: true,
     },
+    colorsPerAliasType: {},
   };
 
   /** @ngInject */

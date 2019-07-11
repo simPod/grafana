@@ -86,10 +86,27 @@ export class DataProcessor {
     const colorIndex = index % colors.length;
     const color = this.panel.aliasColors[alias] || colors[colorIndex];
 
+    const baseAliasRegex = /(.+) (in|out)/;
+    const baseAliasMatch = baseAliasRegex.exec(alias);
+
+    let hexColor;
+    if (baseAliasMatch !== null) {
+      const baseAlias = baseAliasMatch[1];
+
+      if (this.panel.colorsPerAliasType.hasOwnProperty(baseAlias)) {
+        hexColor = this.panel.colorsPerAliasType[baseAlias];
+      } else {
+        hexColor = getColorForTheme(color, config.theme);
+        this.panel.colorsPerAliasType[baseAliasMatch[1]] = hexColor;
+      }
+    } else {
+      hexColor = getColorForTheme(color, config.theme);
+    }
+
     const series = new TimeSeries({
       datapoints: datapoints || [],
       alias: alias,
-      color: getColorForTheme(color, config.theme),
+      color: hexColor,
       unit: field.config ? field.config.unit : undefined,
       dataFrameIndex,
       fieldIndex,
