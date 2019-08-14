@@ -80,9 +80,12 @@ export const AnnotationMarker2 = ({
       ref={refs.setReference}
       className={className}
       style={style!}
-      onMouseEnter={() => state !== STATE_EDITING && setState(STATE_HOVERED)}
+      onKeyUp={() => state !== STATE_EDITING && setState(STATE_HOVERED)}
+      onClick={() => state !== STATE_EDITING && setState(STATE_HOVERED)}
       onMouseLeave={() => state !== STATE_EDITING && setState(STATE_DEFAULT)}
       data-testid={selectors.pages.Dashboard.Annotations.marker}
+      role={'button'}
+      tabIndex={-1}
     >
       {contents &&
         createPortal(
