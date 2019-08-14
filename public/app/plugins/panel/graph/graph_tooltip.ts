@@ -178,6 +178,12 @@ export default function GraphTooltip(this: any, elem: any, dashboard: any, scope
 
   elem.bind('plotclick', (event: any, pos: any, item: any) => {
     appEvents.emit(CoreEvents.graphClicked, { pos: pos, panel: panel, item: item });
+
+    if (item?.datapoint[0] === undefined) {
+      return;
+    }
+
+    window.dispatchEvent(new CustomEvent('click-time-changed', { detail: { time: item.datapoint[0] } }));
   });
 
   elem.bind('plotleave', () => {
