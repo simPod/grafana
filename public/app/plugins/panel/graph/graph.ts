@@ -131,7 +131,7 @@ class GraphElement {
     this.annotations = this.ctrl.annotations || [];
     this.buildFlotPairs(this.data);
     const graphHeight = this.ctrl.height;
-    updateLegendValues(this.data, this.panel, graphHeight);
+    updateLegendValues(this.data, this.panel, graphHeight, this.ctrl.templateSrv);
 
     if (!this.panel.legend.show) {
       if (this.legendElem.hasChildNodes()) {
@@ -427,8 +427,15 @@ class GraphElement {
     for (let i = 0; i < yaxis.length; i++) {
       const axis: any = yaxis[i];
       const panelOptions = this.panel.yaxes[i];
-      axis.options.max = axis.options.max !== null ? axis.options.max : panelOptions.max;
-      axis.options.min = axis.options.min !== null ? axis.options.min : panelOptions.min;
+      if (axis.options.max === null) {
+        const max = this.ctrl.templateSrv.replace(panelOptions.max, this.panel.scopedVars);
+        axis.options.max = max === '' ? null : max;
+      }
+
+      if (axis.options.min === null) {
+        const min = this.ctrl.templateSrv.replace(panelOptions.min, this.panel.scopedVars);
+        axis.options.min = min === '' ? null : min;
+      }
     }
   }
 
