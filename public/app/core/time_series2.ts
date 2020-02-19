@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import { getValueFormat, ValueFormatter, stringToJsRegex, DecimalCount, formattedValueToString } from '@grafana/data';
+import { TemplateSrv } from '../features/templating/template_srv';
 
 function matchSeriesOverride(aliasOrRegex: string, seriesAlias: string) {
   if (!aliasOrRegex) {
@@ -33,13 +34,19 @@ function getFillGradient(amount: number) {
  * @param data series data
  * @param panel
  * @param height
+ * @param templateSrv
  */
-export function updateLegendValues(data: TimeSeries[], panel: any, height: number) {
+export function updateLegendValues(data: TimeSeries[], panel: any, height: number, templateSrv: TemplateSrv) {
   for (let i = 0; i < data.length; i++) {
     const series = data[i];
     const yaxes = panel.yaxes;
     const seriesYAxis = series.yaxis || 1;
     const axis = yaxes[seriesYAxis - 1];
+    for (let i = 0; i < yaxes.length; i++) {
+      const axis: any = yaxes[i];
+      axis.max = axis.max === null ? null : templateSrv.replace(axis.max, panel.scopedVars);
+      axis.min = axis.min === null ? null : templateSrv.replace(axis.min, panel.scopedVars);
+    }
     const formatter = getValueFormat(axis.format);
 
     // decimal override

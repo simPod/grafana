@@ -1,3 +1,4 @@
+import { TemplateSrv } from 'app/features/templating/template_srv';
 import TimeSeries, { updateLegendValues } from 'app/core/time_series2';
 
 describe('TimeSeries', () => {
@@ -439,14 +440,14 @@ describe('TimeSeries', () => {
     it('should set decimals to Y axis decimals + 1', () => {
       panel.yaxes[0].decimals = 2;
       const data = [series];
-      updateLegendValues(data, panel, height);
+      updateLegendValues(data, panel, height, new TemplateSrv());
       expect(data[0].decimals).toBe(3);
     });
 
     it('should set decimals to legend decimals value if it was set explicitly', () => {
       panel.decimals = 3;
       const data = [series];
-      updateLegendValues(data, panel, height);
+      updateLegendValues(data, panel, height, new TemplateSrv());
       expect(data[0].decimals).toBe(3);
     });
   });
