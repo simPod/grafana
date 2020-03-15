@@ -7,7 +7,6 @@ import { initPanelState } from '../../panel/state/actions';
 import { setPanelInstanceState } from '../../panel/state/reducers';
 import { DashboardModel, PanelModel } from '../state';
 
-import { LazyLoader } from './LazyLoader';
 import { PanelChromeAngular } from './PanelChromeAngular';
 import { PanelStateWrapper } from './PanelStateWrapper';
 
@@ -55,6 +54,8 @@ export class DashboardPanelUnconnected extends PureComponent<Props> {
     this.props.panel.isInView = !this.props.lazy;
     if (!this.props.lazy) {
       this.onPanelLoad();
+    } else {
+      this.onPanelLoad();
     }
   }
 
@@ -93,6 +94,7 @@ export class DashboardPanelUnconnected extends PureComponent<Props> {
     if (plugin && plugin.angularPanelCtrl) {
       return (
         <PanelChromeAngular
+          onVisibilityChange={this.onVisibilityChange}
           plugin={plugin}
           panel={panel}
           dashboard={dashboard}
@@ -108,6 +110,7 @@ export class DashboardPanelUnconnected extends PureComponent<Props> {
 
     return (
       <PanelStateWrapper
+        onVisibilityChange={this.onVisibilityChange}
         plugin={plugin}
         panel={panel}
         dashboard={dashboard}
@@ -125,15 +128,9 @@ export class DashboardPanelUnconnected extends PureComponent<Props> {
   };
 
   render() {
-    const { width, height, lazy } = this.props;
+    const { lazy } = this.props;
 
-    return lazy ? (
-      <LazyLoader width={width} height={height} onChange={this.onVisibilityChange} onLoad={this.onPanelLoad}>
-        {this.renderPanel}
-      </LazyLoader>
-    ) : (
-      this.renderPanel({ isInView: true })
-    );
+    return this.renderPanel({ isInView: !lazy });
   }
 }
 

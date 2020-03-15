@@ -6,6 +6,7 @@ import { useMeasure, useToggle } from 'react-use';
 import { GrafanaTheme2, LoadingState } from '@grafana/data';
 import { selectors } from '@grafana/e2e-selectors';
 
+import { LazyLoader } from '../../../../../public/app/features/dashboard/dashgrid/LazyLoader';
 import { useStyles2, useTheme2 } from '../../themes';
 import { getFocusStyles } from '../../themes/mixins';
 import { DelayRender } from '../../utils/DelayRender';
@@ -66,6 +67,9 @@ interface BaseProps {
    */
   onMouseMove?: () => void;
   onMouseEnter?: () => void;
+
+  onVisibilityChange?: (x: boolean) => void;
+  isInView?: boolean;
 }
 
 interface FixedDimensions extends BaseProps {
@@ -134,6 +138,8 @@ export function PanelChrome({
   onFocus,
   onMouseMove,
   onMouseEnter,
+  onVisibilityChange,
+  isInView,
 }: PanelChromeProps) {
   const theme = useTheme2();
   const styles = useStyles2(getStyles);
@@ -316,14 +322,25 @@ export function PanelChrome({
       )}
 
       {!collapsed && (
-        <div
-          id={panelContentId}
-          data-testid={selectors.components.Panels.Panel.content}
-          className={cx(styles.content, height === undefined && styles.containNone)}
-          style={contentStyle}
-        >
-          {typeof children === 'function' ? children(innerWidth, innerHeight) : children}
-        </div>
+      <div
+        id={panelContentId}
+        data-testid={selectors.components.Panels.Panel.content}className={cx(styles.content, height === undefined && styles.containNone)}
+        style={contentStyle}
+      >
+        {isInView ? (
+         typeof children === 'function' ? children(innerWidth, innerHeight) : children
+        ) : (
+          <LazyLoader
+            width={innerWidth}
+            height={innerHeight}
+            onChange={(v) => {
+              onVisibilityChange?.(v);
+            }}
+          >
+           {typeof children === 'function' ? children(innerWidth, innerHeight) : children}
+          </LazyLoader>
+        )}
+      </div>
       )}
     </section>
   );
