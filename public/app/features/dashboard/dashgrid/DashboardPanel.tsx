@@ -127,7 +127,7 @@ export class DashboardPanelUnconnected extends PureComponent<Props, State> {
 
     // If we are lazy state don't render anything
     if (isLazy) {
-      return null;
+      // return null;
     }
 
     const panelWrapperClass = classNames({

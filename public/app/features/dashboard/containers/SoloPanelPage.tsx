@@ -87,6 +87,8 @@ export class SoloPanelPage extends Component<Props, State> {
       return <div>Loading & initializing dashboard</div>;
     }
 
+    panel.alreadyWasInView = true;
+
     return (
       <div className="panel-solo">
         <DashboardPanel dashboard={dashboard} panel={panel} isEditing={false} isViewing={false} isInView={true} />

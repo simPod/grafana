@@ -68,7 +68,7 @@ class MetricsPanelCtrl extends PanelCtrl {
 
   private onMetricsPanelRefresh() {
     // ignore fetching data if another panel is in fullscreen
-    if (this.otherPanelInFullscreenMode()) {
+    if (this.otherPanelInFullscreenMode() || this.panel.alreadyWasInView !== true) {
       return;
     }
 

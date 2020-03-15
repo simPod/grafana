@@ -52,6 +52,7 @@ const notPersistedProperties: { [str: string]: boolean } = {
   isViewing: true,
   isEditing: true,
   isInView: true,
+  alreadyWasInView: true,
   hasRefreshed: true,
   cachedPluginOptions: true,
   plugin: true,
@@ -160,6 +161,7 @@ export class PanelModel implements DataConfigSource {
   isEditing: boolean;
   isInView: boolean;
   hasChanged: boolean;
+  alreadyWasInView: boolean;
 
   hasRefreshed: boolean;
   events: EventBus;

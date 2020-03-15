@@ -227,6 +227,13 @@ export class DashboardGrid extends PureComponent<Props> {
       const panelClasses = classNames({ 'react-grid-item--fullscreen': panel.isViewing });
       const id = panel.id.toString();
       panel.isInView = this.isInView(panel);
+      if (panel.isInView) {
+        const wasInView = panel.alreadyWasInView;
+        panel.alreadyWasInView = true;
+        if (!wasInView) {
+          panel.refresh();
+        }
+      }
 
       panelElements.push(
         <div key={id} className={panelClasses} id={'panel-' + id} ref={(elem) => elem && (this.panelRef[id] = elem)}>
