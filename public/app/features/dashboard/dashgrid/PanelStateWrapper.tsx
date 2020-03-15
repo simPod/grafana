@@ -67,6 +67,7 @@ export interface Props {
   isEditing: boolean;
   isInView: boolean;
   isDraggable?: boolean;
+  onVisibilityChange: (v: boolean) => void;
   width: number;
   height: number;
   onInstanceStateChange: (value: unknown) => void;
@@ -75,6 +76,7 @@ export interface Props {
 }
 
 export interface State {
+  isInView: boolean;
   isFirstLoad: boolean;
   renderCounter: number;
   errorMessage?: string;
@@ -97,6 +99,7 @@ export class PanelStateWrapper extends PureComponent<Props, State> {
     this.debouncedSetPanelAttention = debounce(this.setPanelAttention.bind(this), 100);
 
     this.state = {
+      isInView: props.isInView,
       isFirstLoad: true,
       renderCounter: 0,
       context: {
@@ -260,9 +263,9 @@ export class PanelStateWrapper extends PureComponent<Props, State> {
     this.setState({ liveTime });
   }
 
-  componentDidUpdate(prevProps: Props) {
-    const { isInView, width, panel } = this.props;
-    const { context } = this.state;
+  componentDidUpdate(prevProps: Props, prevState: State) {
+    const { width, panel } = this.props;
+    const { isInView, context } = this.state;
 
     const app = this.getPanelContextApp();
 
@@ -276,7 +279,7 @@ export class PanelStateWrapper extends PureComponent<Props, State> {
     }
 
     // View state has changed
-    if (isInView !== prevProps.isInView) {
+    if (isInView !== prevState.isInView) {
       if (isInView) {
         // Check if we need a delayed refresh
         if (panel.refreshWhenInView) {
@@ -343,7 +346,8 @@ export class PanelStateWrapper extends PureComponent<Props, State> {
   }
 
   onRefresh = () => {
-    const { dashboard, panel, isInView, width } = this.props;
+    const { dashboard, panel, width } = this.props;
+    const { isInView } = this.state;
 
     if (!dashboard.snapshot && !isInView) {
       panel.refreshWhenInView = true;
@@ -556,7 +560,8 @@ export class PanelStateWrapper extends PureComponent<Props, State> {
   debouncedSetPanelAttention() {}
 
   render() {
-    const { dashboard, panel, width, height, plugin } = this.props;
+    const { dashboard, panel, width, height, plugin, onVisibilityChange } = this.props;
+    const { isInView: isInViewInitially } = this.props;
     const { errorMessage, data } = this.state;
     const { transparent } = panel;
     const panelChromeProps = getPanelChromeProps({ ...this.props, data });
@@ -591,6 +596,11 @@ export class PanelStateWrapper extends PureComponent<Props, State> {
         onFocus={() => this.setPanelAttention()}
         onMouseEnter={() => this.setPanelAttention()}
         onMouseMove={() => this.debouncedSetPanelAttention()}
+        onVisibilityChange={(v) => {
+          this.setState({ isInView: v });
+          onVisibilityChange(v);
+        }}
+        isInView={isInViewInitially}
       >
         {(innerWidth, innerHeight) => (
           <>

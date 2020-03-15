@@ -6,6 +6,7 @@ import { useMeasure, useToggle } from 'react-use';
 import { GrafanaTheme2, LoadingState } from '@grafana/data';
 import { selectors } from '@grafana/e2e-selectors';
 
+import { LazyLoader } from '../../../../../public/app/features/dashboard/dashgrid/LazyLoader';
 import { useStyles2, useTheme2 } from '../../themes';
 import { getFocusStyles } from '../../themes/mixins';
 import { usePointerDistance } from '../../utils';
@@ -71,6 +72,9 @@ interface BaseProps {
    */
   onMouseMove?: () => void;
   onMouseEnter?: () => void;
+
+  onVisibilityChange?: (x: boolean) => void;
+  isInView?: boolean;
   /**
    * If true, the VizPanelMenu will always be visible in the panel header. Defaults to false.
    */
@@ -145,6 +149,8 @@ export function PanelChrome({
   onFocus,
   onMouseMove,
   onMouseEnter,
+  onVisibilityChange,
+  isInView,
   onDragStart,
   showMenuAlways = false,
 }: PanelChromeProps) {
@@ -406,8 +412,20 @@ export function PanelChrome({
           style={contentStyle}
           onPointerDown={onContentPointerDown}
         >
-          {typeof children === 'function' ? children(innerWidth, innerHeight) : children}
-        </div>
+          {isInView ? (
+         typeof children === 'function' ? children(innerWidth, innerHeight) : children
+        ) : (
+          <LazyLoader
+            width={innerWidth}
+            height={innerHeight}
+            onChange={(v) => {
+              onVisibilityChange?.(v);
+            }}
+          >
+           {typeof children === 'function' ? children(innerWidth, innerHeight) : children}
+          </LazyLoader>
+        )}
+      </div>
       )}
     </section>
   );

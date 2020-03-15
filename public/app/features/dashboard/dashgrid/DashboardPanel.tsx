@@ -8,7 +8,6 @@ import { setPanelInstanceState } from '../../panel/state/reducers';
 import { DashboardModel } from '../state/DashboardModel';
 import { PanelModel } from '../state/PanelModel';
 
-import { LazyLoader } from './LazyLoader';
 import { PanelStateWrapper } from './PanelStateWrapper';
 
 export interface OwnProps {
@@ -55,6 +54,8 @@ export class DashboardPanelUnconnected extends PureComponent<Props> {
     this.props.panel.isInView = !this.props.lazy;
     if (!this.props.lazy) {
       this.onPanelLoad();
+    } else {
+      this.onPanelLoad();
     }
   }
 
@@ -92,6 +93,7 @@ export class DashboardPanelUnconnected extends PureComponent<Props> {
 
     return (
       <PanelStateWrapper
+        onVisibilityChange={this.onVisibilityChange}
         plugin={plugin}
         panel={panel}
         dashboard={dashboard}
@@ -109,15 +111,9 @@ export class DashboardPanelUnconnected extends PureComponent<Props> {
   };
 
   render() {
-    const { width, height, lazy } = this.props;
+    const { lazy } = this.props;
 
-    return lazy ? (
-      <LazyLoader width={width} height={height} onChange={this.onVisibilityChange} onLoad={this.onPanelLoad}>
-        {this.renderPanel}
-      </LazyLoader>
-    ) : (
-      this.renderPanel({ isInView: true })
-    );
+    return this.renderPanel({ isInView: !lazy });
   }
 }
 
