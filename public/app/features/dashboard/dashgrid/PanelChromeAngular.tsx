@@ -16,6 +16,7 @@ import { isSoloRoute } from '../../../routes/utils';
 import { getTimeSrv, TimeSrv } from '../services/TimeSrv';
 import { DashboardModel, PanelModel } from '../state';
 
+import { LazyLoader } from './LazyLoader';
 import { PanelHeader } from './PanelHeader/PanelHeader';
 
 interface OwnProps {
@@ -25,6 +26,7 @@ interface OwnProps {
   isViewing: boolean;
   isEditing: boolean;
   isInView: boolean;
+  onVisibilityChange: (v: boolean) => void;
   width: number;
   height: number;
 }
@@ -40,6 +42,8 @@ interface DispatchProps {
 export type Props = OwnProps & ConnectedProps & DispatchProps;
 
 export interface State {
+  isInView: boolean;
+  loaded: boolean;
   data: PanelData;
   errorMessage?: string;
 }
@@ -67,6 +71,8 @@ export class PanelChromeAngularUnconnected extends PureComponent<Props, State> {
         series: [],
         timeRange: getDefaultTimeRange(),
       },
+      isInView: props.isInView,
+      loaded: false,
     };
   }
 
@@ -106,8 +112,9 @@ export class PanelChromeAngularUnconnected extends PureComponent<Props, State> {
 
   componentDidUpdate(prevProps: Props, prevState: State) {
     const { plugin, height, width, panel } = this.props;
+    const { isInView, loaded } = this.state;
 
-    if (prevProps.plugin !== plugin) {
+    if (prevProps.plugin !== plugin || (prevState.isInView !== isInView && !loaded)) {
       this.loadAngularPanel();
     }
 
@@ -158,6 +165,8 @@ export class PanelChromeAngularUnconnected extends PureComponent<Props, State> {
       key: panel.key,
       angularComponent: loader.load(this.element, this.scopeProps, template),
     });
+
+    this.setState({ loaded: true });
   }
 
   hasOverlayHeader() {
@@ -173,7 +182,8 @@ export class PanelChromeAngularUnconnected extends PureComponent<Props, State> {
   }
 
   render() {
-    const { dashboard, panel, isViewing, isEditing, plugin } = this.props;
+    const { dashboard, panel, isViewing, isEditing, plugin, onVisibilityChange, width, height } = this.props;
+    const { isInView: isInViewInitially } = this.props;
     const { errorMessage, data } = this.state;
     const { transparent } = panel;
 
@@ -193,6 +203,12 @@ export class PanelChromeAngularUnconnected extends PureComponent<Props, State> {
       'panel-content--no-padding': plugin.noPadding,
     });
 
+    const content = (
+      <div className={panelContentClassNames}>
+        <div ref={(element) => (this.element = element)} className="panel-height-helper" />
+      </div>
+    );
+
     return (
       <div className={containerClassNames} aria-label={selectors.components.Panels.Panel.containerByTitle(panel.title)}>
         <PanelHeader
@@ -207,9 +223,20 @@ export class PanelChromeAngularUnconnected extends PureComponent<Props, State> {
           data={data}
           alertState={alertState}
         />
-        <div className={panelContentClassNames}>
-          <div ref={(element) => (this.element = element)} className="panel-height-helper" />
-        </div>
+        {isInViewInitially ? (
+          content
+        ) : (
+          <LazyLoader
+            width={width}
+            height={height - 32}
+            onChange={(v) => {
+              this.setState({ isInView: v });
+              onVisibilityChange(v);
+            }}
+          >
+            {() => content}
+          </LazyLoader>
+        )}
       </div>
     );
   }

@@ -36,6 +36,7 @@ import { getTimeSrv, TimeSrv } from '../services/TimeSrv';
 import { DashboardModel, PanelModel } from '../state';
 import { loadSnapshotData } from '../utils/loadSnapshotData';
 
+import { LazyLoader } from './LazyLoader';
 import { PanelHeader } from './PanelHeader/PanelHeader';
 import { seriesVisibilityConfigFactory } from './SeriesVisibilityConfigFactory';
 import { liveTimer } from './liveTimer';
@@ -49,12 +50,14 @@ export interface Props {
   isViewing: boolean;
   isEditing: boolean;
   isInView: boolean;
+  onVisibilityChange: (v: boolean) => void;
   width: number;
   height: number;
   onInstanceStateChange: (value: any) => void;
 }
 
 export interface State {
+  isInView: boolean;
   isFirstLoad: boolean;
   renderCounter: number;
   errorMessage?: string;
@@ -76,6 +79,7 @@ export class PanelChrome extends PureComponent<Props, State> {
     const eventBus = props.dashboard.events.newScopedBus(`panel:${props.panel.id}`, this.eventFilter);
 
     this.state = {
+      isInView: props.isInView,
       isFirstLoad: true,
       renderCounter: 0,
       refreshWhenInView: false,
@@ -223,9 +227,9 @@ export class PanelChrome extends PureComponent<Props, State> {
     this.setState({ liveTime });
   }
 
-  componentDidUpdate(prevProps: Props) {
-    const { isInView, width } = this.props;
-    const { context } = this.state;
+  componentDidUpdate(prevProps: Props, prevState: State) {
+    const { width } = this.props;
+    const { isInView, context } = this.state;
 
     const app = this.getPanelContextApp();
 
@@ -239,7 +243,7 @@ export class PanelChrome extends PureComponent<Props, State> {
     }
 
     // View state has changed
-    if (isInView !== prevProps.isInView) {
+    if (isInView !== prevState.isInView) {
       if (isInView) {
         // Check if we need a delayed refresh
         if (this.state.refreshWhenInView) {
@@ -300,7 +304,8 @@ export class PanelChrome extends PureComponent<Props, State> {
   }
 
   onRefresh = () => {
-    const { dashboard, panel, isInView, width } = this.props;
+    const { dashboard, panel, width } = this.props;
+    const { isInView } = this.state;
 
     if (!isInView) {
       this.setState({ refreshWhenInView: true });
@@ -503,7 +508,7 @@ export class PanelChrome extends PureComponent<Props, State> {
   }
 
   render() {
-    const { dashboard, panel, isViewing, isEditing, width, height, plugin } = this.props;
+    const { dashboard, panel, isViewing, isEditing, width, height, plugin, onVisibilityChange } = this.props;
     const { errorMessage, data } = this.state;
     const { transparent } = panel;
 
@@ -516,6 +521,8 @@ export class PanelChrome extends PureComponent<Props, State> {
       'panel-container--no-title': this.hasOverlayHeader(),
       [`panel-alert-state--${alertState}`]: alertState !== undefined,
     });
+
+    const heightWithoutTitle = height - 32;
 
     return (
       <section
@@ -534,18 +541,31 @@ export class PanelChrome extends PureComponent<Props, State> {
           alertState={alertState}
           data={data}
         />
-        <ErrorBoundary
-          dependencies={[data, plugin, panel.getOptions()]}
-          onError={this.onPanelError}
-          onRecover={this.onPanelErrorRecover}
-        >
-          {({ error }) => {
-            if (error) {
-              return null;
-            }
-            return this.renderPanel(width, height);
+        <LazyLoader
+          width={width}
+          height={heightWithoutTitle}
+          onChange={(v) => {
+            this.setState({ isInView: v });
+            onVisibilityChange(v);
           }}
-        </ErrorBoundary>
+        >
+          {() => {
+            return (
+              <ErrorBoundary
+                dependencies={[data, plugin, panel.getOptions()]}
+                onError={this.onPanelError}
+                onRecover={this.onPanelErrorRecover}
+              >
+                {({ error }) => {
+                  if (error) {
+                    return null;
+                  }
+                  return this.renderPanel(width, heightWithoutTitle);
+                }}
+              </ErrorBoundary>
+            );
+          }}
+        </LazyLoader>
       </section>
     );
   }
