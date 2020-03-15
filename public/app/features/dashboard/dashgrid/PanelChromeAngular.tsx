@@ -25,6 +25,7 @@ interface OwnProps {
   isEditing: boolean;
   isInView: boolean;
   isDraggable?: boolean;
+  onVisibilityChange: (v: boolean) => void;
   width: number;
   height: number;
   hideMenu?: boolean;
@@ -41,6 +42,8 @@ interface DispatchProps {
 export type Props = OwnProps & ConnectedProps & DispatchProps;
 
 export interface State {
+  isInView: boolean;
+  loaded: boolean;
   data: PanelData;
   errorMessage?: string;
 }
@@ -67,6 +70,8 @@ export class PanelChromeAngularUnconnected extends PureComponent<Props, State> {
         series: [],
         timeRange: getDefaultTimeRange(),
       },
+      isInView: props.isInView,
+      loaded: false,
     };
   }
 
@@ -109,8 +114,9 @@ export class PanelChromeAngularUnconnected extends PureComponent<Props, State> {
 
   componentDidUpdate(prevProps: Props, prevState: State) {
     const { plugin, height, width, panel } = this.props;
+    const { isInView, loaded } = this.state;
 
-    if (prevProps.plugin !== plugin) {
+    if (prevProps.plugin !== plugin || (prevState.isInView !== isInView && !loaded)) {
       this.loadAngularPanel();
     }
 
@@ -161,6 +167,8 @@ export class PanelChromeAngularUnconnected extends PureComponent<Props, State> {
       key: panel.key,
       angularComponent: loader.load(this.element, this.scopeProps, template),
     });
+
+    this.setState({ loaded: true });
   }
 
   hasOverlayHeader() {
@@ -176,7 +184,7 @@ export class PanelChromeAngularUnconnected extends PureComponent<Props, State> {
   }
 
   render() {
-    const { dashboard, panel } = this.props;
+    const { dashboard, panel, isInView: isInViewInitially, onVisibilityChange } = this.props;
     const { errorMessage, data } = this.state;
     const { transparent } = panel;
 
@@ -209,6 +217,11 @@ export class PanelChromeAngularUnconnected extends PureComponent<Props, State> {
         hoverHeader={panelChromeProps.hasOverlayHeader()}
         displayMode={transparent ? 'transparent' : 'default'}
         onCancelQuery={panelChromeProps.onCancelQuery}
+        onVisibilityChange={(v) => {
+          this.setState({ isInView: v });
+          onVisibilityChange(v);
+        }}
+        isInView={isInViewInitially}
       >
         {() => <div ref={(element) => (this.element = element)} className="panel-height-helper" />}
       </PanelChrome>
