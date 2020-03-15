@@ -57,6 +57,7 @@ function setupTestContext(options: Partial<Props>) {
     isInView: false,
     width: 100,
     height: 100,
+    onVisibilityChange: () => {},
     onInstanceStateChange: () => {},
   };
 
