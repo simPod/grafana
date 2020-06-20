@@ -65,6 +65,9 @@ export interface FieldConfig<TOptions extends object = any> {
   max?: number | null;
   sum?: number | null;
 
+  // When true, the resuls should remain in context, but not be displayed
+  hidden?: boolean;
+
   // Convert input values into a display string
   mappings?: ValueMapping[];
 

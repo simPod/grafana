@@ -5,6 +5,7 @@ import { filterFieldsTransformer } from './filter';
 import { RegexpOrNamesMatcherOptions } from '../matchers/nameMatcher';
 
 export interface FilterFieldsByNameTransformerOptions {
+  hide?: boolean;
   include?: RegexpOrNamesMatcherOptions;
   exclude?: RegexpOrNamesMatcherOptions;
 }
@@ -22,6 +23,7 @@ export const filterFieldsByNameTransformer: DataTransformerInfo<FilterFieldsByNa
   operator: (options) => (source) =>
     source.pipe(
       filterFieldsTransformer.operator({
+        hide: options.hide,
         include: getMatcherConfig(options.include),
         exclude: getMatcherConfig(options.exclude),
       })
