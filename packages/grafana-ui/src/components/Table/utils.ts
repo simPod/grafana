@@ -12,6 +12,7 @@ import {
 
 import { DefaultCell } from './DefaultCell';
 import { BarGaugeCell } from './BarGaugeCell';
+import { NullCell } from './NullCell';
 import { TableCellDisplayMode, TableFieldOptions } from './types';
 import { JSONViewCell } from './JSONViewCell';
 import { ImageCell } from './ImageCell';
@@ -52,8 +53,8 @@ export function getColumns(data: DataFrame, availableWidth: number, columnMinWid
       continue;
     }
 
-    if (fieldTableOptions.width) {
-      availableWidth -= fieldTableOptions.width;
+    if (fieldTableOptions.width || field.config.hidden) {
+      availableWidth -= field.config.hidden ? 1 : fieldTableOptions.width;
       fieldCountWithoutWidth -= 1;
     }
 
@@ -76,8 +77,8 @@ export function getColumns(data: DataFrame, availableWidth: number, columnMinWid
         return field.values.get(i);
       },
       sortType: selectSortType(field.type),
-      width: fieldTableOptions.width,
-      minWidth: 50,
+      width: field.config.hidden ? 1 : fieldTableOptions.width,
+      minWidth: field.config.hidden ? null : 50,
       filter: memoizeOne(filterByValue(field)),
       justifyContent: getTextAlign(field),
     });
@@ -95,6 +96,10 @@ export function getColumns(data: DataFrame, availableWidth: number, columnMinWid
 }
 
 function getCellComponent(displayMode: TableCellDisplayMode, field: Field) {
+  if (field.config.hidden) {
+    return NullCell;
+  }
+
   switch (displayMode) {
     case TableCellDisplayMode.ColorText:
     case TableCellDisplayMode.ColorBackground:

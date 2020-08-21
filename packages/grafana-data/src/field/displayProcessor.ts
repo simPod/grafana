@@ -86,6 +86,8 @@ export function getDisplayProcessor(options?: DisplayProcessorOptions): DisplayP
       }
     }
 
+    const hidden = config.hidden ?? false;
+
     if (!isNaN(numeric)) {
       if (shouldFormat && !_.isBoolean(value)) {
         const v = formatFunc(numeric, config.decimals, null, options.timeZone);
@@ -96,7 +98,7 @@ export function getDisplayProcessor(options?: DisplayProcessorOptions): DisplayP
 
       // Return the value along with scale info
       if (text) {
-        return { text, numeric, prefix, suffix, ...scaleFunc(numeric) };
+        return { text, numeric, prefix, suffix, hidden, ...scaleFunc(numeric) };
       }
     }
 
@@ -108,7 +110,7 @@ export function getDisplayProcessor(options?: DisplayProcessorOptions): DisplayP
       }
     }
 
-    return { text, numeric, prefix, suffix, ...scaleFunc(-Infinity) };
+    return { text, numeric, prefix, suffix, hidden, ...scaleFunc(-Infinity) };
   };
 }
 

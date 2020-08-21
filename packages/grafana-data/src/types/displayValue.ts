@@ -16,6 +16,7 @@ export interface DisplayValue extends FormattedValue {
    */
   color?: string;
   title?: string;
+  hidden?: boolean;
 }
 
 /**
