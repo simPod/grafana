@@ -6,7 +6,7 @@ import { TableCellHeight } from '@grafana/schema';
 export function useTableStyles(theme: GrafanaTheme2, cellHeightOption: TableCellHeight) {
   const borderColor = theme.colors.border.weak;
   const resizerColor = theme.colors.primary.border;
-  const cellPadding = 6;
+  const cellPadding = 2;
   const cellHeight = getCellHeight(theme, cellHeightOption, cellPadding);
   const rowHeight = cellHeight + 2;
   const headerHeight = 28;
