@@ -8,7 +8,7 @@ export const getTableStyles = stylesFactory((theme: GrafanaTheme) => {
   const headerBg = theme.colors.bg2;
   const borderColor = theme.colors.border1;
   const resizerColor = theme.isLight ? palette.blue95 : palette.blue77;
-  const cellPadding = 6;
+  const cellPadding = 2;
   const lineHeight = theme.typography.lineHeight.md;
   const bodyFontSize = 14;
   const cellHeight = cellPadding * 2 + bodyFontSize * lineHeight;
