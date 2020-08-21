@@ -9,7 +9,7 @@ export const getTableStyles = (theme: GrafanaTheme2) => {
   const headerBg = theme.colors.background.secondary;
   const borderColor = theme.colors.border.weak;
   const resizerColor = theme.colors.primary.border;
-  const cellPadding = 6;
+  const cellPadding = 2;
   const lineHeight = theme.typography.body.lineHeight;
   const bodyFontSize = 14;
   const cellHeight = cellPadding * 2 + bodyFontSize * lineHeight;
