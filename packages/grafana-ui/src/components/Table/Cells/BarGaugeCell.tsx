@@ -64,7 +64,7 @@ export const BarGaugeCell = (props: TableCellProps) => {
       <BarGauge
         width={innerWidth}
         height={tableStyles.cellHeightInner}
-        field={config}
+        field={getFieldConfigWithMinMax(field, true)}
         display={field.display}
         text={{ valueSize: 14 }}
         value={displayValue}

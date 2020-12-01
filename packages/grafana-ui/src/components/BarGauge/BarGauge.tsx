@@ -28,6 +28,8 @@ import { calculateFontSize, measureText } from '../../utils/measureText';
 import { clearButtonStyles } from '../Button';
 import { FormattedValueDisplay } from '../FormattedValueDisplay/FormattedValueDisplay';
 
+import { BarGaugePercentValue } from './BarGaugePercentValue';
+
 const MIN_VALUE_HEIGHT = 18;
 const MAX_VALUE_HEIGHT = 50;
 const MAX_VALUE_WIDTH = 150;
@@ -109,6 +111,8 @@ export class BarGauge extends PureComponent<Props> {
     switch (this.props.displayMode) {
       case 'lcd':
         return this.renderRetroBars();
+      case 'percent':
+        return this.renderPercentGradientBar();
       case 'basic':
       case 'gradient':
       default:
@@ -130,6 +134,22 @@ export class BarGauge extends PureComponent<Props> {
             style={styles.value}
           />
         )}
+        {showUnfilled && <div style={styles.emptyBar} />}
+        <div style={styles.bar} />
+      </div>
+    );
+  }
+
+  renderPercentGradientBar(): ReactNode {
+    const { value, field, showUnfilled } = this.props;
+
+    const valuePercent = field.sum === undefined || field.sum === null ? 0 : value.numeric / field.sum;
+    const percentDisplay = `${Math.round(valuePercent * 100 * 100) / 100} %`;
+    const styles = getPercentStyles(this.props);
+
+    return (
+      <div style={styles.wrapper}>
+        <BarGaugePercentValue value={percentDisplay} style={styles.value} />
         {showUnfilled && <div style={styles.emptyBar} />}
         <div style={styles.bar} />
       </div>
@@ -589,6 +609,74 @@ export function getBasicAndGradientStyles(props: Props): BasicAndGradientStyles 
       barStyles.background = getBarGradient(props, maxBarWidth);
     }
   }
+
+  return {
+    wrapper: wrapperStyles,
+    bar: barStyles,
+    value: valueStyles,
+    emptyBar,
+  };
+}
+
+/**
+ * Only exported to for unit test
+ */
+export function getPercentStyles(props: Props): BasicAndGradientStyles {
+  const { width: maxBarWidth, field, value, theme } = props;
+  const { maxBarHeight } = calculateBarAndValueDimensions(props);
+
+  const valuePercent = getValuePercent(value.numeric, field.min!, field.max!);
+  const textColor = getTextValueColor(props);
+
+  const wrapperStyles: CSSProperties = {
+    display: 'flex',
+    flexGrow: 1,
+    position: 'relative',
+  };
+
+  const barStyles: CSSProperties = {
+    borderRadius: '3px',
+    position: 'relative',
+    zIndex: 1,
+  };
+
+  const valueStyles: CSSProperties = {
+    margin: 'auto',
+    display: 'block',
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    zIndex: 1,
+    textAlign: 'center',
+  };
+
+  const emptyBar: CSSProperties = {
+    background: `rgba(${theme.isDark ? '255,255,255' : '0,0,0'}, 0.07)`,
+    flexGrow: 1,
+    display: 'flex',
+    borderRadius: '3px',
+    position: 'relative',
+  };
+
+  const barWidth = Math.max(valuePercent * maxBarWidth, 1);
+
+  // Custom styles for horizontal orientation
+  wrapperStyles.flexDirection = 'row-reverse';
+  wrapperStyles.justifyContent = 'flex-end';
+  wrapperStyles.alignItems = 'stretch';
+
+  barStyles.transition = 'width 1s';
+  barStyles.height = `${maxBarHeight}px`;
+  barStyles.width = `${barWidth}px`;
+
+  // shift empty region back to fill gaps due to border radius
+  emptyBar.left = '-3px';
+
+  // Basic styles
+  barStyles.background = `${tinycolor(textColor).setAlpha(0.35).toRgbString()}`;
+  barStyles.borderRight = `2px solid ${textColor}`;
 
   return {
     wrapper: wrapperStyles,

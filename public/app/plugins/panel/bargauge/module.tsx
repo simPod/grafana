@@ -26,6 +26,7 @@ export const plugin = new PanelPlugin<Options>(BarGaugePanel)
             { value: BarGaugeDisplayMode.Gradient, label: 'Gradient' },
             { value: BarGaugeDisplayMode.Lcd, label: 'Retro LCD' },
             { value: BarGaugeDisplayMode.Basic, label: 'Basic' },
+            { value: BarGaugeDisplayMode.Percent, label: 'Percent' },
           ],
         },
         defaultValue: defaultOptions.displayMode,

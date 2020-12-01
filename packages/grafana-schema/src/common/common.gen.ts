@@ -646,6 +646,7 @@ export enum BarGaugeDisplayMode {
   Basic = 'basic',
   Gradient = 'gradient',
   Lcd = 'lcd',
+  Percent = 'percent',
 }
 
 /**

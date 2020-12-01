@@ -77,6 +77,7 @@ export interface FieldConfig<TOptions = any> {
   decimals?: DecimalCount; // Significant digits (for display)
   min?: number | null;
   max?: number | null;
+  sum?: number | null;
 
   // Interval indicates the expected regular step between values in the series.
   // When an interval exists, consumers can identify "missing" values when the expected value is not present.
@@ -252,6 +253,10 @@ export interface NumericRange {
   min?: number | null;
   max?: number | null;
   delta: number;
+}
+
+export interface NumericRangeWithSum extends NumericRange {
+  sum?: number | null;
 }
 
 export interface DataFrame extends QueryResultBase {
