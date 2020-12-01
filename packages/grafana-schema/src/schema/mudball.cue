@@ -202,7 +202,7 @@ BigValueTextMode: "auto" | "value" | "value_and_name" | "name" | "none" @cuetsy(
 FieldTextAlignment: "auto" | "left" | "right" | "center" @cuetsy(kind="type")
 
 // TODO docs
-TableCellDisplayMode: "auto" | "color-text" | "color-background" | "color-background-solid" | "gradient-gauge" | "lcd-gauge" | "json-view" | "basic" | "image" @cuetsy(kind="enum",memberNames="Auto|ColorText|ColorBackground|ColorBackgroundSolid|GradientGauge|LcdGauge|JSONView|BasicGauge|Image")
+TableCellDisplayMode: "auto" | "color-text" | "color-background" | "color-background-solid" | "gradient-gauge" | "lcd-gauge" | "percent-gauge" | "json-view" | "basic" | "image" @cuetsy(kind="enum",memberNames="Auto|ColorText|ColorBackground|ColorBackgroundSolid|GradientGauge|LcdGauge|PercentGauge|JSONView|BasicGauge|Image")
 
 // TODO docs
 VizTextDisplayOptions: {
@@ -247,7 +247,7 @@ VizLegendOptions: {
 } @cuetsy(kind="interface")
 
 // TODO docs
-BarGaugeDisplayMode: "basic" | "lcd" | "gradient" @cuetsy(kind="enum")
+BarGaugeDisplayMode: "basic" | "lcd" | "gradient" | "percent" @cuetsy(kind="enum")
 
 // TODO docs
 TableFieldOptions: {

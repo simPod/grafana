@@ -401,6 +401,7 @@ export enum TableCellDisplayMode {
   Image = 'image',
   JSONView = 'json-view',
   LcdGauge = 'lcd-gauge',
+  PercentGauge = 'percent-gauge',
 }
 
 /**
@@ -471,6 +472,7 @@ export enum BarGaugeDisplayMode {
   Basic = 'basic',
   Gradient = 'gradient',
   Lcd = 'lcd',
+  Percent = 'percent',
 }
 
 /**
