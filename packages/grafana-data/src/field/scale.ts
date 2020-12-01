@@ -2,7 +2,7 @@ import { isNumber } from 'lodash';
 
 import { GrafanaTheme2 } from '../themes/types';
 import { reduceField, ReducerID } from '../transformations/fieldReducer';
-import { Field, FieldConfig, FieldType, NumericRange } from '../types/dataFrame';
+import { Field, FieldConfig, FieldType, NumericRangeWithSum } from '../types/dataFrame';
 import { Threshold } from '../types/thresholds';
 
 import { getFieldColorModeForField } from './fieldColor';
@@ -71,14 +71,15 @@ function getBooleanScaleCalculator(field: Field, theme: GrafanaTheme2): ScaleCal
   };
 }
 
-export function getMinMaxAndDelta(field: Field): NumericRange {
+export function getMinMaxAndDelta(field: Field): NumericRangeWithSum {
   if (field.type !== FieldType.number) {
-    return { min: 0, max: 100, delta: 100 };
+    return { min: 0, max: 100, delta: 100, sum: 0 };
   }
 
   // Calculate min/max if required
   let min = field.config.min;
   let max = field.config.max;
+  let sum = -1;
 
   if (!isNumber(min) || !isNumber(max)) {
     if (field.values && field.values.length) {
@@ -89,9 +90,12 @@ export function getMinMaxAndDelta(field: Field): NumericRange {
       if (!isNumber(max)) {
         max = stats[ReducerID.max];
       }
+
+      sum = stats[ReducerID.sum];
     } else {
       min = 0;
       max = 100;
+      sum = 0;
     }
   }
 
@@ -99,7 +103,30 @@ export function getMinMaxAndDelta(field: Field): NumericRange {
     min,
     max,
     delta: max! - min!,
+    sum,
   };
+}
+
+function getSum(field: Field): { sum: number } {
+  if (field.type !== FieldType.number) {
+    return { sum: 0 };
+  }
+
+  // Calculate min/max if required
+  let min = field.config.min;
+  let max = field.config.max;
+  let sum = -1;
+
+  if (!isNumber(min) || !isNumber(max)) {
+    if (field.values && field.values.length) {
+      const stats = reduceField({ field, reducers: [ReducerID.min, ReducerID.max] });
+      sum = stats[ReducerID.sum];
+    } else {
+      sum = 0;
+    }
+  }
+
+  return { sum };
 }
 
 /**
@@ -117,5 +144,5 @@ export function getFieldConfigWithMinMax(field: Field, local?: boolean): FieldCo
     return { ...config, ...getMinMaxAndDelta(field) };
   }
 
-  return { ...config, ...field.state.range };
+  return { ...config, ...field.state.range, ...getSum(field) };
 }

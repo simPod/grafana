@@ -42,6 +42,7 @@ const barGaugeOpts: SelectableValue[] = [
   { value: BarGaugeDisplayMode.Basic, label: 'Basic' },
   { value: BarGaugeDisplayMode.Gradient, label: 'Gradient' },
   { value: BarGaugeDisplayMode.Lcd, label: 'Retro LCD' },
+  { value: BarGaugeDisplayMode.Percent, label: 'Percent' },
 ];
 
 const valueModes: SelectableValue[] = [
