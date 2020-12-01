@@ -63,6 +63,7 @@ export interface FieldConfig<TOptions extends object = any> {
   decimals?: number | null; // Significant digits (for display)
   min?: number | null;
   max?: number | null;
+  fieldCalcs?: FieldCalcs;
 
   // Convert input values into a display string
   mappings?: ValueMapping[];

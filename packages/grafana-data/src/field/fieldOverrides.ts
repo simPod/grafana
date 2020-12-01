@@ -4,6 +4,7 @@ import {
   DataLink,
   DynamicConfigValue,
   Field,
+  FieldCalcs,
   FieldColorModeId,
   FieldConfig,
   FieldConfigPropertyItem,
@@ -40,14 +41,23 @@ interface OverrideProps {
   properties: DynamicConfigValue[];
 }
 
-export function findNumericFieldMinMax(data: DataFrame[]): NumericRange {
+interface NumericRangeWithFieldCalcs extends NumericRange {
+  fieldCalcs: FieldCalcs | null;
+}
+
+export function findNumericFieldMinMax(data: DataFrame[], fieldToMatch: Field): NumericRangeWithFieldCalcs {
   let min: number | null = null;
   let max: number | null = null;
+  let fieldCalcs: FieldCalcs | null = null;
 
   const reducers = [ReducerID.min, ReducerID.max];
 
   for (const frame of data) {
     for (const field of frame.fields) {
+      if (fieldToMatch.name !== field.name) {
+        continue;
+      }
+
       if (field.type === FieldType.number) {
         const stats = reduceField({ field, reducers });
         const statsMin = stats[ReducerID.min];
@@ -60,11 +70,13 @@ export function findNumericFieldMinMax(data: DataFrame[]): NumericRange {
         if (max === null || statsMax > max) {
           max = statsMax;
         }
+
+        fieldCalcs = stats;
       }
     }
   }
 
-  return { min, max, delta: (max ?? 0) - (min ?? 0) };
+  return { min, max, delta: (max ?? 0) - (min ?? 0), fieldCalcs };
 }
 
 /**
@@ -175,11 +187,16 @@ export function applyFieldOverrides(options: ApplyFieldOverrideOptions): DataFra
       let range: NumericRange | undefined = undefined;
       if (field.type === FieldType.number) {
         if (!globalRange && (!isNumber(config.min) || !isNumber(config.max))) {
-          globalRange = findNumericFieldMinMax(options.data!);
+          const numericFieldMinMaxWithStats = findNumericFieldMinMax(options.data!, field);
+          config.fieldCalcs = numericFieldMinMaxWithStats.fieldCalcs ?? undefined;
+          globalRange = numericFieldMinMaxWithStats;
         }
         const min = config.min ?? globalRange!.min;
         const max = config.max ?? globalRange!.max;
-        range = { min, max, delta: max! - min! };
+        // @ts-ignore
+        const fieldCalcs = config?.fieldCalcs ?? globalRange?.fieldCalcs ?? undefined;
+        // @ts-ignore
+        range = { min, max, delta: max! - min!, fieldCalcs };
       }
 
       // Some color modes needs series index to assign field color so we count
