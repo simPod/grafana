@@ -1,6 +1,6 @@
 import { isNumber } from 'lodash';
 import { reduceField, ReducerID } from '../transformations/fieldReducer';
-import { Field, FieldConfig, FieldType, GrafanaTheme, NumericRange, Threshold } from '../types';
+import { Field, FieldConfig, FieldType, GrafanaTheme, NumericRangeWithSum, Threshold } from '../types';
 import { getFieldColorModeForField } from './fieldColor';
 import { getActiveThresholdForValue } from './thresholds';
 
@@ -34,14 +34,15 @@ export function getScaleCalculator(field: Field, theme: GrafanaTheme): ScaleCalc
   };
 }
 
-function getMinMaxAndDelta(field: Field): NumericRange {
+function getMinMaxAndDelta(field: Field): NumericRangeWithSum {
   if (field.type !== FieldType.number) {
-    return { min: 0, max: 100, delta: 100 };
+    return { min: 0, max: 100, delta: 100, sum: 0 };
   }
 
   // Calculate min/max if required
   let min = field.config.min;
   let max = field.config.max;
+  let sum = -1;
 
   if (!isNumber(min) || !isNumber(max)) {
     if (field.values && field.values.length) {
@@ -52,9 +53,12 @@ function getMinMaxAndDelta(field: Field): NumericRange {
       if (!isNumber(max)) {
         max = stats[ReducerID.max];
       }
+
+      sum = stats[ReducerID.sum];
     } else {
       min = 0;
       max = 100;
+      sum = 0;
     }
   }
 
@@ -62,6 +66,7 @@ function getMinMaxAndDelta(field: Field): NumericRange {
     min,
     max,
     delta: max! - min!,
+    sum: sum,
   };
 }
 

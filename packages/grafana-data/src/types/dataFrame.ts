@@ -63,6 +63,7 @@ export interface FieldConfig<TOptions extends object = any> {
   decimals?: number | null; // Significant digits (for display)
   min?: number | null;
   max?: number | null;
+  sum?: number | null;
 
   // Convert input values into a display string
   mappings?: ValueMapping[];
@@ -175,6 +176,10 @@ export interface NumericRange {
   min?: number | null;
   max?: number | null;
   delta: number;
+}
+
+export interface NumericRangeWithSum extends NumericRange {
+  sum?: number | null;
 }
 
 export interface DataFrame extends QueryResultBase {

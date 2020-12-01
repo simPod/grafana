@@ -104,6 +104,7 @@ function getCellComponent(displayMode: TableCellDisplayMode, field: Field) {
     case TableCellDisplayMode.LcdGauge:
     case TableCellDisplayMode.BasicGauge:
     case TableCellDisplayMode.GradientGauge:
+    case TableCellDisplayMode.PercentGauge:
       return BarGaugeCell;
     case TableCellDisplayMode.JSONView:
       return JSONViewCell;
