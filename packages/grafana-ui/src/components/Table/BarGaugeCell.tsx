@@ -40,6 +40,8 @@ export const BarGaugeCell: FC<TableCellProps> = (props) => {
     barGaugeMode = BarGaugeDisplayMode.Lcd;
   } else if (field.config.custom && field.config.custom.displayMode === TableCellDisplayMode.BasicGauge) {
     barGaugeMode = BarGaugeDisplayMode.Basic;
+  } else if (field.config.custom && field.config.custom.displayMode === TableCellDisplayMode.PercentGauge) {
+    barGaugeMode = BarGaugeDisplayMode.Percent;
   }
 
   const getLinks = () => {
@@ -59,7 +61,7 @@ export const BarGaugeCell: FC<TableCellProps> = (props) => {
       <BarGauge
         width={innerWidth}
         height={tableStyles.cellHeightInner}
-        field={config}
+        field={getFieldConfigWithMinMax(field, true)}
         display={field.display}
         text={{ valueSize: 14 }}
         value={displayValue}
