@@ -210,7 +210,7 @@ export const Table: FC<Props> = memo((props: Props) => {
           )}
           {rows.length > 0 ? (
             <FixedSizeList
-              height={height - headerHeight}
+              height={rows.length * tableStyles.rowHeight}
               itemCount={rows.length}
               itemSize={tableStyles.rowHeight}
               width={'100%'}
