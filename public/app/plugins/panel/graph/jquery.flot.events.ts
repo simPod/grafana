@@ -32,14 +32,11 @@ const createAnnotationToolip: CreatePlotOverlay = (element, event, plot) => {
         content: content,
         position: 'bottom center',
         classes: 'drop-popover drop-popover--annotation',
-        openOn: 'hover',
-        hoverCloseDelay: 200,
+        openOn: 'click',
         tetherOptions: {
           constraints: [{ to: 'window', pin: true, attachment: 'both' }],
         },
       });
-
-      drop.open();
 
       drop.on('close', () => {
         setTimeout(() => {
