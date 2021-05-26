@@ -10,7 +10,7 @@ import {
   LiveChannelEvent,
   LiveChannelScope,
 } from '@grafana/data';
-import { getGrafanaLiveSrv, locationService } from '@grafana/runtime';
+import { config, getGrafanaLiveSrv, locationService } from '@grafana/runtime';
 import { appEvents, contextSrv } from 'app/core/core';
 
 import { ShowModalReactEvent } from '../../../types/events';
@@ -135,8 +135,10 @@ class DashboardWatcher {
                   })
                 );
               } else {
-                appEvents.emit(AppEvents.alertSuccess, ['Dashboard updated']);
-                this.reloadPage();
+                if (config.buildInfo.env === 'development') {
+                  appEvents.emit(AppEvents.alertSuccess, ['Dashboard updated']);
+                  this.reloadPage();
+                }
               }
             } else if (showPopup) {
               if (action === DashboardEventAction.EditingStarted && !this.hasSeenNotice) {
