@@ -58,5 +58,5 @@ LazyLoader.observer = new IntersectionObserver(
       LazyLoader.callbacks[entry.target.id](entry);
     }
   },
-  { rootMargin: '100px' }
+  { rootMargin: '500px' }
 );
