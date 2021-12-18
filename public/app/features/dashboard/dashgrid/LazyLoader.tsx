@@ -60,5 +60,5 @@ LazyLoader.observer = new IntersectionObserver(
       }
     }
   },
-  { rootMargin: '100px' }
+  { rootMargin: '500px' }
 );
