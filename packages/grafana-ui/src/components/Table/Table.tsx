@@ -209,8 +209,7 @@ export const Table: FC<Props> = memo((props: Props) => {
     pageOptions,
   } = useTable(options, useFilters, useSortBy, usePagination, useAbsoluteLayout, useResizeColumns);
 
-  let listHeight = height - (headerHeight + footerHeight);
-
+  let listHeight = rows.length * tableStyles.rowHeight - (headerHeight + footerHeight);
   if (enablePagination) {
     listHeight -= tableStyles.cellHeight;
   }
