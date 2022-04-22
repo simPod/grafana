@@ -493,10 +493,10 @@ github.com/cenkalti/backoff/v4 v4.1.1 h1:G2HAfAmvm/GcKan2oOQpBXOd2tT2G57ZnZGWa1P
 github.com/cenkalti/backoff/v4 v4.1.1/go.mod h1:scbssz8iZGpm3xbr14ovlUdkxfGXNInqkPWOWmG2CLw=
 github.com/census-instrumentation/opencensus-proto v0.2.1/go.mod h1:f6KPmirojxKA12rnyqOA5BBL4O983OfeGPqjHWSTneU=
 github.com/census-instrumentation/opencensus-proto v0.3.0/go.mod h1:f6KPmirojxKA12rnyqOA5BBL4O983OfeGPqjHWSTneU=
-github.com/centrifugal/centrifuge v0.19.0 h1:YHws0dRpgsBiI73tRl1wwaB13gzuaI1AM4IFcQQQqcw=
-github.com/centrifugal/centrifuge v0.19.0/go.mod h1:O2elf8q3Qkie3z97wkqVqxB52pnOpPsfFUa7L88Lpy0=
-github.com/centrifugal/protocol v0.7.6 h1:AfMwTZfwnFwZslIzQL4QtRnWSVO32RPSuk4iNS/V9tg=
-github.com/centrifugal/protocol v0.7.6/go.mod h1:cJo0/BuXglhPfg0fgSgTXvBZ7y+9rdg4+nPbIDOVmlA=
+github.com/centrifugal/centrifuge v0.21.1 h1:7saDm953rxzke4YfzoNekxKnpckmdTnz8EzbSribwos=
+github.com/centrifugal/centrifuge v0.21.1/go.mod h1:uAFqaz85mlIw995eZblWzfuMj1Ok4jWNGZUMYbpQfbE=
+github.com/centrifugal/protocol v0.8.4 h1:RM+6GRzNU27qLQni73azcBRrjYXsRhVyOj94F1ejXSs=
+github.com/centrifugal/protocol v0.8.4/go.mod h1:cJo0/BuXglhPfg0fgSgTXvBZ7y+9rdg4+nPbIDOVmlA=
 github.com/certifi/gocertifi v0.0.0-20191021191039-0944d244cd40/go.mod h1:sGbDF6GwGcLpkNXPUTkMRoywsNa/ol15pxFe6ERfguA=
 github.com/cespare/xxhash v0.0.0-20181017004759-096ff4a8a059/go.mod h1:XrSqR1VqqWfGrhpAt58auRo0WTKS1nRRg3ghfAqPWnc=
 github.com/cespare/xxhash v1.1.0 h1:a6HrQnmkObjyL+Gs60czilIUGqrzKutQD6XZog3p+ko=
@@ -1377,8 +1377,6 @@ github.com/grafana/dskit v0.0.0-20211011144203-3a88ec0b675f h1:FvvSVEbnGeM2bUivG
 github.com/grafana/dskit v0.0.0-20211011144203-3a88ec0b675f/go.mod h1:uPG2nyK4CtgNDmWv7qyzYcdI+S90kHHRWvHnBtEMBXM=
 github.com/grafana/go-mssqldb v0.0.0-20210326084033-d0ce3c521036 h1:GplhUk6Xes5JIhUUrggPcPBhOn+eT8+WsHiebvq7GgA=
 github.com/grafana/go-mssqldb v0.0.0-20210326084033-d0ce3c521036/go.mod h1:xbL0rPBG9cCiLr28tMa8zpbdarY27NDyej4t/EjAShU=
-github.com/grafana/grafana-aws-sdk v0.10.1 h1:Ksguhjx6EuGLN/5Oc7oZoxuDReJ5RxIH99yqSMpLGUs=
-github.com/grafana/grafana-aws-sdk v0.10.1/go.mod h1:vFIOHEnY1u5nY0/tge1IHQjPuG6DRKr2ISf/HikUdjE=
 github.com/grafana/grafana-aws-sdk v0.10.3 h1:nqjK8NfrUyUcAtSjGxnt17ZKjeOMCi62MNKFNagjG6g=
 github.com/grafana/grafana-aws-sdk v0.10.3/go.mod h1:vFIOHEnY1u5nY0/tge1IHQjPuG6DRKr2ISf/HikUdjE=
 github.com/grafana/grafana-azure-sdk-go v1.1.0 h1:Gh0fjs7jr4Lp5y+4cjn48U+MQaJeV8i9m1ds/1xszto=
