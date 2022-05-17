@@ -2,7 +2,7 @@ import { interpolateRgbBasis } from 'd3-interpolate';
 import stringHash from 'string-hash';
 import tinycolor from 'tinycolor2';
 
-import { getContrastRatio } from '../themes/colorManipulator';
+import {getContrastRatio, lighten} from '../themes/colorManipulator';
 import { GrafanaTheme2 } from '../themes/types';
 import { reduceField } from '../transformations/fieldReducer';
 import { Field } from '../types/dataFrame';
@@ -12,6 +12,67 @@ import { Registry, RegistryItem } from '../utils/Registry';
 
 import { getScaleCalculator, ColorScaleValue } from './scale';
 import { fallBackThreshold } from './thresholds';
+
+const flopNameRegex = /(.+?)(?: → (.+?))? (in|out)/;
+
+const colors = [
+  '#7EB26D', // 0: pale green
+  '#EAB839', // 1: mustard
+  '#6ED0E0', // 2: light blue
+  '#EF843C', // 3: orange
+  '#E24D42', // 4: red
+  '#1F78C1', // 5: ocean
+  '#BA43A9', // 6: purple
+  '#705DA0', // 7: violet
+  '#508642', // 8: dark green
+  '#CCA300', // 9: dark sand
+  '#447EBC',
+  '#C15C17',
+  '#890F02',
+  '#0A437C',
+  '#6D1F62',
+  '#584477',
+  '#B7DBAB',
+  '#F4D598',
+  '#70DBED',
+  '#F9BA8F',
+  '#F29191',
+  '#82B5D8',
+  '#E5A8E2',
+  '#AEA2E0',
+  '#629E51',
+  '#E5AC0E',
+  '#64B0C8',
+  '#E0752D',
+  '#BF1B00',
+  '#0A50A1',
+  '#962D82',
+  '#614D93',
+  '#9AC48A',
+  '#F2C96D',
+  '#65C5DB',
+  '#F9934E',
+  '#EA6460',
+  '#5195CE',
+  '#D683CE',
+  '#806EB7',
+  '#3F6833',
+  '#967302',
+  '#2F575E',
+  '#99440A',
+  '#58140C',
+  '#052B51',
+  '#511749',
+  '#3F2B5B',
+  '#E0F9D7',
+  '#FCEACA',
+  '#CFFAFF',
+  '#F9E2D2',
+  '#FCE2DE',
+  '#BADFF4',
+  '#F9D9F9',
+  '#DEDAF7',
+];
 
 /** @beta */
 export type FieldValueColorCalculator = (value: number, percent: number, Threshold?: Threshold) => string;
@@ -32,7 +93,7 @@ export const fieldColorModeRegistry = new Registry<FieldColorMode>(() => {
       id: FieldColorModeId.Fixed,
       name: 'Single color',
       description: 'Set a specific color',
-      getCalculator: getFixedColor,
+      getCalculator: getFixedColor(new FixedColorState()),
     },
     {
       id: FieldColorModeId.Shades,
@@ -60,6 +121,13 @@ export const fieldColorModeRegistry = new Registry<FieldColorMode>(() => {
       getColors: (theme: GrafanaTheme2) => {
         return theme.visualization.palette;
       },
+    }),
+    new FieldColorSchemeModeName({
+      id: FieldColorModeId.PaletteClassicNetworkGuysInOut,
+      name: 'Classic palette (Network Guys in-out)',
+      isContinuous: false,
+      isByValue: false,
+      getColors: () => colors,
     }),
     new FieldColorSchemeMode({
       id: FieldColorModeId.PaletteClassicByName,
@@ -229,6 +297,67 @@ export class FieldColorSchemeMode implements FieldColorMode {
   }
 }
 
+export class FieldColorSchemeModeName extends FieldColorSchemeMode {
+  baseColorMap: Record<string, string>;
+  colorMap: Record<string, string>;
+  baseSeriesIndex: number;
+  colors: string[]|undefined;
+  subSeriesIndex: Record<string, number>;
+
+  constructor(options: FieldColorSchemeModeOptions) {
+    super(options);
+
+    this.baseColorMap = {};
+    this.colorMap = {};
+    this.baseSeriesIndex = 0;
+    this.subSeriesIndex = {};
+  }
+
+  getCalculator(field: Field, theme: GrafanaTheme2): (_: number, percent: number, _threshold?: Threshold) => string {
+    const colorsPalette = this.getColors(theme);
+
+    return (_: number, _percent: number, _threshold?: Threshold) => {
+      const name = field.state?.displayName ?? field.labels?.name ?? null;
+      if (name === null) {
+        return colorsPalette[(this.baseSeriesIndex++) % colorsPalette.length];
+      }
+
+      const nameMatch = flopNameRegex.exec(name);
+
+      if (nameMatch === null) {
+        return colorsPalette[(this.baseSeriesIndex++) % colorsPalette.length];
+      }
+
+      const baseName = nameMatch[1];
+      const subName = nameMatch[2];
+      const nameKey = subName ? `${baseName} → ${subName}` : baseName;
+
+      let color = this.colorMap[nameKey];
+      if (color === undefined) {
+        let baseColor = this.baseColorMap[baseName];
+        if(baseColor === undefined) {
+          baseColor = colorsPalette[(this.baseSeriesIndex++) % colorsPalette.length]
+          this.baseColorMap[baseName] = baseColor;
+        }
+
+        if (subName === undefined) {
+          color = baseColor;
+        } else {
+          if (this.subSeriesIndex[baseName] === undefined) {
+            this.subSeriesIndex[baseName] = 0
+          }
+          this.subSeriesIndex[baseName] += 1;
+          color = lighten(baseColor, 0.05 * (this.subSeriesIndex[baseName]));
+        }
+
+        this.colorMap[nameKey] = color;
+      }
+
+      return color;
+    };
+  }
+}
+
 /** @beta */
 export function getFieldColorModeForField(field: Field): FieldColorMode {
   return fieldColorModeRegistry.get(field.config.color?.mode ?? FieldColorModeId.Thresholds);
@@ -263,11 +392,54 @@ export function getFieldSeriesColor(field: Field, theme: GrafanaTheme2): ColorSc
   return scale(value);
 }
 
-function getFixedColor(field: Field, theme: GrafanaTheme2) {
-  return () => {
-    return theme.visualization.getColorByName(field.config.color?.fixedColor ?? FALLBACK_COLOR);
-  };
+class FixedColorState {
+  colorMap: Record<string, string>;
+  subSeriesIndex: Record<string, number>;
+
+  constructor() {
+    this.colorMap = {};
+    this.subSeriesIndex = {};
+  }
 }
+
+const getFixedColor = (state: FixedColorState) => (field: Field, theme: GrafanaTheme2)=> {
+  return () => {
+    const name = field.state?.displayName ?? field.labels?.name ?? null;
+
+    let baseColor = theme.visualization.getColorByName(field.config.color?.fixedColor ?? FALLBACK_COLOR);
+    if (name === null) {
+      return baseColor;
+    }
+
+    const nameMatch = flopNameRegex.exec(name);
+
+    if (nameMatch === null) {
+      return baseColor;
+    }
+
+    const baseName = nameMatch[1];
+    const subName = nameMatch[2];
+    const nameKey = subName ? `${baseName} → ${subName}` : baseName;
+
+    let color = state.colorMap[nameKey];
+    if (color === undefined) {
+      if (subName === undefined) {
+        return baseColor;
+      }
+
+      if (state.subSeriesIndex[baseName] === undefined) {
+        state.subSeriesIndex[baseName] = 0
+      }
+
+      state.subSeriesIndex[baseName] += 1;
+      color = lighten(baseColor, 0.05 * (state.subSeriesIndex[baseName]));
+      console.log(color);
+      state.colorMap[nameKey] = color;
+    }
+
+    return color;
+  };
+};
 
 function getShadedColor(field: Field, theme: GrafanaTheme2) {
   return () => {
