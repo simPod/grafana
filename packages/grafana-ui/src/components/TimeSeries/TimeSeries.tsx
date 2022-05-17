@@ -52,6 +52,7 @@ export class UnthemedTimeSeries extends React.Component<TimeSeriesProps> {
     return (
       <GraphNG
         {...this.props}
+        frames={[...this.props.frames].reverse()}
         prepConfig={this.prepConfig}
         propsToDiff={propsToDiff}
         renderLegend={this.renderLegend as any}
