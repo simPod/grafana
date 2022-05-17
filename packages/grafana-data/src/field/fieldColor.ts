@@ -9,6 +9,65 @@ import { Registry } from '../utils/Registry';
 import { getScaleCalculator, ColorScaleValue } from './scale';
 import { fallBackTreshold } from './thresholds';
 
+const colors = [
+  '#7EB26D', // 0: pale green
+  '#EAB839', // 1: mustard
+  '#6ED0E0', // 2: light blue
+  '#EF843C', // 3: orange
+  '#E24D42', // 4: red
+  '#1F78C1', // 5: ocean
+  '#BA43A9', // 6: purple
+  '#705DA0', // 7: violet
+  '#508642', // 8: dark green
+  '#CCA300', // 9: dark sand
+  '#447EBC',
+  '#C15C17',
+  '#890F02',
+  '#0A437C',
+  '#6D1F62',
+  '#584477',
+  '#B7DBAB',
+  '#F4D598',
+  '#70DBED',
+  '#F9BA8F',
+  '#F29191',
+  '#82B5D8',
+  '#E5A8E2',
+  '#AEA2E0',
+  '#629E51',
+  '#E5AC0E',
+  '#64B0C8',
+  '#E0752D',
+  '#BF1B00',
+  '#0A50A1',
+  '#962D82',
+  '#614D93',
+  '#9AC48A',
+  '#F2C96D',
+  '#65C5DB',
+  '#F9934E',
+  '#EA6460',
+  '#5195CE',
+  '#D683CE',
+  '#806EB7',
+  '#3F6833',
+  '#967302',
+  '#2F575E',
+  '#99440A',
+  '#58140C',
+  '#052B51',
+  '#511749',
+  '#3F2B5B',
+  '#E0F9D7',
+  '#FCEACA',
+  '#CFFAFF',
+  '#F9E2D2',
+  '#FCE2DE',
+  '#BADFF4',
+  '#F9D9F9',
+  '#DEDAF7',
+];
+
 /** @beta */
 export type FieldValueColorCalculator = (value: number, percent: number, Threshold?: Threshold) => string;
 
@@ -55,9 +114,7 @@ export const fieldColorModeRegistry = new Registry<FieldColorMode>(() => {
       name: 'Classic palette (Network Guys in-out)',
       isContinuous: false,
       isByValue: false,
-      getColors: (theme: GrafanaTheme2) => {
-        return theme.visualization.palette;
-      },
+      getColors: () => colors,
     }),
     new FieldColorSchemeMode({
       id: 'continuous-GrYlRd',
@@ -207,37 +264,37 @@ export class FieldColorSchemeMode implements FieldColorMode {
 }
 
 export class FieldColorSchemeModeName extends FieldColorSchemeMode {
-  colorIndex: 0;
   colorMap: Record<string, string>;
 
   constructor(options: FieldColorSchemeModeOptions) {
     super(options);
 
-    this.colorIndex = 0;
     this.colorMap = {};
   }
 
   getCalculator(field: Field, theme: GrafanaTheme2): (_: number, percent: number, _threshold?: Threshold) => string {
     const colors = this.getColors(theme);
+    console.log(field);
 
     const baseNameRegex = /(.+) (in|out)/;
 
     return (_: number, _percent: number, _threshold?: Threshold) => {
-      let name = field.state?.displayName ?? null;
+      const name = field.state?.displayName ?? field.labels?.name ?? null;
+      const seriesIndex = field.state?.seriesIndex ?? 0;
       if (name === null) {
-        return colors[this.colorIndex++ % colors.length];
+        return colors[seriesIndex % colors.length];
       }
 
       const baseNameMatch = baseNameRegex.exec(name);
 
       if (baseNameMatch === null) {
-        return colors[this.colorIndex++ % colors.length];
+        return colors[seriesIndex % colors.length];
       }
 
       const baseName = baseNameMatch[1];
 
       if (this.colorMap[baseName] === undefined) {
-        const color = colors[this.colorIndex++ % colors.length];
+        const color = colors[seriesIndex % colors.length];
         this.colorMap[baseName] = color;
 
         return color;
