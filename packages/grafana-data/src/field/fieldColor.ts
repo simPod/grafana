@@ -50,6 +50,15 @@ export const fieldColorModeRegistry = new Registry<FieldColorMode>(() => {
         return theme.visualization.palette;
       },
     }),
+    new FieldColorSchemeModeName({
+      id: FieldColorModeId.PaletteClassicNetworkGuysInOut,
+      name: 'Classic palette (Network Guys in-out)',
+      isContinuous: false,
+      isByValue: false,
+      getColors: (theme: GrafanaTheme2) => {
+        return theme.visualization.palette;
+      },
+    }),
     new FieldColorSchemeMode({
       id: 'continuous-GrYlRd',
       name: 'Green-Yellow-Red',
@@ -194,6 +203,48 @@ export class FieldColorSchemeMode implements FieldColorMode {
         return colors[seriesIndex % colors.length];
       };
     }
+  }
+}
+
+export class FieldColorSchemeModeName extends FieldColorSchemeMode {
+  colorIndex: 0;
+  colorMap: Record<string, string>;
+
+  constructor(options: FieldColorSchemeModeOptions) {
+    super(options);
+
+    this.colorIndex = 0;
+    this.colorMap = {};
+  }
+
+  getCalculator(field: Field, theme: GrafanaTheme2): (_: number, percent: number, _threshold?: Threshold) => string {
+    const colors = this.getColors(theme);
+
+    const baseNameRegex = /(.+) (in|out)/;
+
+    return (_: number, _percent: number, _threshold?: Threshold) => {
+      let name = field.state?.displayName ?? null;
+      if (name === null) {
+        return colors[this.colorIndex++ % colors.length];
+      }
+
+      const baseNameMatch = baseNameRegex.exec(name);
+
+      if (baseNameMatch === null) {
+        return colors[this.colorIndex++ % colors.length];
+      }
+
+      const baseName = baseNameMatch[1];
+
+      if (this.colorMap[baseName] === undefined) {
+        const color = colors[this.colorIndex++ % colors.length];
+        this.colorMap[baseName] = color;
+
+        return color;
+      } else {
+        return this.colorMap[baseName];
+      }
+    };
   }
 }
 
