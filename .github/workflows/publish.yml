@@ -20,7 +20,7 @@ jobs:
       uses: actions/setup-node@v3.3.0
       id: generate-docs
       with:
-        node-version: '16'
+        node-version: '17'
     - name: Get yarn cache directory path
       id: yarn-cache-dir-path
       run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
