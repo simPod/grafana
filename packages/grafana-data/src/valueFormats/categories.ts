@@ -56,6 +56,7 @@ export const getCategories = (): ValueFormatCategory[] => [
       { name: 'Scientific notation', id: 'sci', fn: sci },
       { name: 'Locale format', id: 'locale', fn: locale },
       { name: 'Pixels', id: 'pixel', fn: toFixedUnit('px') },
+      { name: 'Axis hack', id: 'bool_hack_axis', fn: booleanValueFormatter('', ' ') }, // for some reason there has to be `bool_` prefix
     ],
   },
   {
