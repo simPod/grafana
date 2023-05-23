@@ -80,7 +80,7 @@ export const PlotLegend = memo(
       <VizLayout.Legend placement={placement} {...vizLayoutLegendProps}>
         <VizLegend
           placement={placement}
-          items={legendItems}
+          items={[...legendItems].reverse()}
           displayMode={displayMode}
           sortBy={vizLayoutLegendProps.sortBy}
           sortDesc={vizLayoutLegendProps.sortDesc}
