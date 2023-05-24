@@ -124,7 +124,7 @@ class DashboardWatcher {
               return;
             }
 
-            const showPopup = this.editing || dash.hasUnsavedChanges();
+            const showPopup = false;
 
             if (action === DashboardEventAction.Saved) {
               if (showPopup) {
