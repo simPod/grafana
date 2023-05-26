@@ -149,7 +149,7 @@ export const AnnotationsPlugin2 = ({
             let y0 = u.valToPos(vals.yMax[i], yKey, true);
             let y1 = u.valToPos(vals.yMin[i], yKey, true);
 
-            ctx.fillStyle = colorManipulator.alpha(color, vals.fillOpacity[i]);
+            ctx.fillStyle = color;
             ctx.fillRect(x0, y0, x1 - x0, y1 - y0);
 
             ctx.lineWidth = Math.round(vals.lineWidth[i] * uPlot.pxRatio);
@@ -183,7 +183,7 @@ export const AnnotationsPlugin2 = ({
               renderLine(ctx, y0, y1, x1, color);
 
               if (canvasRegionRendering) {
-                ctx.fillStyle = colorManipulator.alpha(color, 0.1);
+                ctx.fillStyle = color;
                 ctx.fillRect(x0, y0, x1 - x0, u.bbox.height);
               }
             }
@@ -217,6 +217,7 @@ export const AnnotationsPlugin2 = ({
 
       for (let i = 0; i < vals.time.length; i++) {
         let color = getColorByName(vals.color?.[i] || DEFAULT_ANNOTATION_COLOR);
+        color = colorManipulator.alpha(color, 1);
         let left = Math.round(plot.valToPos(vals.time[i], 'x')) || 0; // handles -0
         let style: React.CSSProperties | null = null;
         let className = '';
