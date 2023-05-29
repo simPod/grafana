@@ -221,7 +221,7 @@ export class GraphNG extends Component<GraphNGProps, GraphNGState> {
     const propsChanged = !sameProps(prevProps, this.props, propsToDiff);
 
     if (frames !== prevProps.frames || propsChanged || timeZone !== prevProps.timeZone) {
-      let newState = this.prepState(this.props, false);
+      let newState = this.prepState(this.props);
 
       if (newState) {
         const shouldReconfig =
