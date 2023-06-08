@@ -4,7 +4,7 @@ import * as React from 'react';
 import { DataFrame, TimeRange } from '@grafana/data';
 
 import { PanelContextRoot } from '../../components/PanelChrome/PanelContext';
-import { hasVisibleLegendSeries, PlotLegend } from '../../components/uPlot/PlotLegend';
+import { PlotLegend } from '../../components/uPlot/PlotLegend';
 import { UPlotConfigBuilder } from '../../components/uPlot/config/UPlotConfigBuilder';
 import { withTheme2 } from '../../themes/ThemeContext';
 import { GraphNG, GraphNGProps, PropDiffFn } from '../GraphNG/GraphNG';
@@ -39,7 +39,7 @@ export class UnthemedTimeSeries extends Component<TimeSeriesProps> {
   renderLegend = (config: UPlotConfigBuilder) => {
     const { legend, frames } = this.props;
 
-    if (!config || (legend && !legend.showLegend) || !hasVisibleLegendSeries(config, frames)) {
+    if (!config || (legend && !legend.showLegend)) {
       return null;
     }
 
