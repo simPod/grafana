@@ -435,9 +435,6 @@ const getStyles = (theme: GrafanaTheme2) => {
       backgroundColor: 'transparent',
       border: '1px solid transparent',
       boxSizing: 'border-box',
-      '&:hover': {
-        border: `1px solid ${borderColor}`,
-      },
     }),
     loadingBarContainer: css({
       label: 'panel-loading-bar-container',
