@@ -34,6 +34,7 @@ import {
 } from '@grafana/ui';
 import appEvents from 'app/core/app_events';
 import config from 'app/core/config';
+import { triggerAsnQuality } from "app/core/flop/flop";
 import { profiler } from 'app/core/profiler';
 import { applyPanelTimeOverrides } from 'app/features/dashboard/utils/panel';
 import { getDatasourceSrv } from 'app/features/plugins/datasource_srv';
@@ -574,32 +575,36 @@ export class PanelStateWrapper extends PureComponent<Props, State> {
       </div>
     );
 
-    return (
-      <PanelChrome
-        width={width}
-        height={height}
-        title={panelChromeProps.title}
-        loadingState={data.state}
-        statusMessage={errorMessage}
-        statusMessageOnClick={panelChromeProps.onOpenErrorInspect}
-        description={panelChromeProps.description}
-        titleItems={panelChromeProps.titleItems}
-        menu={this.props.hideMenu ? undefined : menu}
-        dragClass={panelChromeProps.dragClass}
-        dragClassCancel="grid-drag-cancel"
-        padding={panelChromeProps.padding}
-        hoverHeaderOffset={hoverHeaderOffset}
-        hoverHeader={panelChromeProps.hasOverlayHeader()}
-        displayMode={transparent ? 'transparent' : 'default'}
-        onCancelQuery={panelChromeProps.onCancelQuery}
-        onFocus={() => this.setPanelAttention()}
-        onMouseEnter={() => this.setPanelAttention()}
-        onMouseMove={() => this.debouncedSetPanelAttention()}
-        onVisibilityChange={(v) => {
-          this.setState({ isInView: v });
-          onVisibilityChange(v);
-        }}
-        isInView={isInViewInitially}
+      return (
+        <PanelChrome
+          width={width}
+          height={height}
+          title={panelChromeProps.title}
+          loadingState={data.state}
+          statusMessage={errorMessage}
+          statusMessageOnClick={panelChromeProps.onOpenErrorInspect}
+          description={panelChromeProps.description}
+          titleItems={panelChromeProps.titleItems}
+          menu={this.props.hideMenu ? undefined : menu}
+          dragClass={panelChromeProps.dragClass}
+          dragClassCancel="grid-drag-cancel"
+          padding={panelChromeProps.padding}
+          hoverHeaderOffset={hoverHeaderOffset}
+          hoverHeader={panelChromeProps.hasOverlayHeader()}
+          displayMode={transparent ? 'transparent' : 'default'}
+          onCancelQuery={panelChromeProps.onCancelQuery}
+
+          onFocus={() => this.setPanelAttention()}
+          onMouseEnter={() =>this.setPanelAttention()}
+          onMouseMove={() => this.debouncedSetPanelAttention()}onVisibilityChange={(v) => {
+            this.setState({ isInView: v });
+            onVisibilityChange(v);
+          }}
+          isInView={isInViewInitially}
+          onHeaderClick={function () {
+            if (Array.isArray(panel.meta?.flopLinks) && panel.meta?.flopLinks.includes('asn-quality')) {
+                triggerAsnQuality(dashboard, panel.id);
+          }}}
       >
         {(innerWidth, innerHeight) => (
           <>
