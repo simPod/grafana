@@ -7,6 +7,7 @@ import { AngularComponent, getAngularLoader } from '@grafana/runtime';
 import { PanelChrome } from '@grafana/ui';
 import config from 'app/core/config';
 import { PANEL_BORDER } from 'app/core/constants';
+import { triggerAsnQuality } from "app/core/flop/flop";
 import { setPanelAngularComponent } from 'app/features/panel/state/reducers';
 import { getPanelStateForModel } from 'app/features/panel/state/selectors';
 import { StoreState } from 'app/types';
@@ -222,6 +223,7 @@ export class PanelChromeAngularUnconnected extends PureComponent<Props, State> {
           onVisibilityChange(v);
         }}
         isInView={isInViewInitially}
+        onHeaderClick={() => triggerAsnQuality(dashboard, panel.id)}
       >
         {() => <div ref={(element) => (this.element = element)} className="panel-height-helper" />}
       </PanelChrome>
