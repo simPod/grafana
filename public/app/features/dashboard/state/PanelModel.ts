@@ -196,6 +196,8 @@ export class PanelModel implements DataConfigSource, IPanelModel {
 
   autoMigrateFrom?: string;
 
+  meta?: Record<string, unknown>;
+
   // non persisted
   isViewing = false;
   isEditing = false;

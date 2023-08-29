@@ -24,7 +24,10 @@ import { TitleItem } from './TitleItem';
 /**
  * @internal
  */
-export type PanelChromeProps = (AutoSize | FixedDimensions) & (Collapsible | HoverHeader);
+export type PanelChromeProps = (AutoSize | FixedDimensions) & (Collapsible | HoverHeader)
+  & {
+  onHeaderClick?: () => void,
+};
 
 interface BaseProps {
   padding?: PanelPadding;
@@ -137,6 +140,7 @@ export function PanelChrome({
   onMouseMove,
   onVisibilityChange,
   isInView,
+  onHeaderClick,
 }: PanelChromeProps) {
   const theme = useTheme2();
   const styles = useStyles2(getStyles);
@@ -296,7 +300,8 @@ export function PanelChrome({
       )}
 
       {hasHeader && (
-        <div className={cx(styles.headerContainer, dragClass)} style={headerStyles} data-testid="header-container">
+        // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions
+        <div className={cx(styles.headerContainer, dragClass)} style={headerStyles} data-testid="header-container aaa" onClick={onHeaderClick}>
           {statusMessage && (
             <div className={dragClassCancel}>
               <PanelStatus message={statusMessage} onClick={statusMessageOnClick} ariaLabel="Panel status" />
