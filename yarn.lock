@@ -2925,8 +2925,8 @@ __metadata:
   linkType: hard
 
 "@glideapps/glide-data-grid@npm:^5.2.1":
-  version: 5.2.1
-  resolution: "@glideapps/glide-data-grid@npm:5.2.1"
+  version: 5.3.0
+  resolution: "@glideapps/glide-data-grid@npm:5.3.0"
   dependencies:
     canvas-hypertxt: ^0.0.7
     react-number-format: ^5.0.0
@@ -2936,7 +2936,7 @@ __metadata:
     react: ^16.12.0 || 17.x || 18.x
     react-dom: ^16.12.0 || 17.x || 18.x
     react-responsive-carousel: ^3.2.7
-  checksum: a91d4049e7c6e1db8a8c00326adbc71c52f90d66398e9ea4b85218b8cf9ffd421a18188cb6e5abf6765ebcc73b376389222e42a87dd5ec441a22f8f197775e7c
+  checksum: ac46110f20fed1dbc6f8ebccb0fca0da51a4e9033016567701dc3441424c51c979c1eb95b72973c9c2dc4755c15db7b8428341da0001372f073c984da6d50f8c
   languageName: node
   linkType: hard
 
@@ -24002,7 +24002,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss@npm:8.4.31":
+"postcss@npm:8.4.31, postcss@npm:^8.4.21, postcss@npm:^8.4.24":
   version: 8.4.31
   resolution: "postcss@npm:8.4.31"
   dependencies:
@@ -24010,17 +24010,6 @@ __metadata:
     picocolors: ^1.0.0
     source-map-js: ^1.0.2
   checksum: 1d8611341b073143ad90486fcdfeab49edd243377b1f51834dc4f6d028e82ce5190e4f11bb2633276864503654fb7cab28e67abdc0fbf9d1f88cad4a0ff0beea
-  languageName: node
-  linkType: hard
-
-"postcss@npm:^8.4.21, postcss@npm:^8.4.24":
-  version: 8.4.26
-  resolution: "postcss@npm:8.4.26"
-  dependencies:
-    nanoid: ^3.3.6
-    picocolors: ^1.0.0
-    source-map-js: ^1.0.2
-  checksum: 1cf08ee10d58cbe98f94bf12ac49a5e5ed1588507d333d2642aacc24369ca987274e1f60ff4cbf0081f70d2ab18a5cd3a4a273f188d835b8e7f3ba381b184e57
   languageName: node
   linkType: hard
 
