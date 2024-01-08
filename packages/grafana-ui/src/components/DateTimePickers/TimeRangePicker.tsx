@@ -307,7 +307,7 @@ const getStyles = (theme: GrafanaTheme2) => {
       [theme.breakpoints.down('sm')]: {
         position: 'fixed',
         right: '50%',
-        top: '50%',
+        top: '260px',
         transform: 'translate(50%, -50%)',
         zIndex: theme.zIndex.modal,
       },
