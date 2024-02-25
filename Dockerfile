@@ -41,7 +41,9 @@ ARG WIRE_TAGS="oss"
 ARG BINGO="true"
 
 # This is required to allow building on arm64 due to https://github.com/golang/go/issues/22040
-RUN apk add --no-cache binutils-gold
+RUN if grep -i -q alpine /etc/issue; then \
+      apk add --no-cache binutils-gold; \
+    fi
 
 # Install build dependencies
 RUN if grep -i -q alpine /etc/issue; then \
