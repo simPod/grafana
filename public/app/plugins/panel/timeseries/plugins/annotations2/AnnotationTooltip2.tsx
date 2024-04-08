@@ -1,7 +1,7 @@
 import { css } from '@emotion/css';
 import * as React from 'react';
 
-import { GrafanaTheme2, dateTimeFormat, systemDateFormats, textUtil } from '@grafana/data';
+import { GrafanaTheme2, dateTimeFormat, systemDateFormats } from '@grafana/data';
 import { HorizontalGroup, IconButton, Tag, usePanelContext, useStyles2 } from '@grafana/ui';
 import alertDef from 'app/features/alerting/state/alertDef';
 
@@ -89,7 +89,7 @@ export const AnnotationTooltip2 = ({ annoVals, annoIdx, timeZone, onEdit }: Prop
       </div>
 
       <div className={styles.body}>
-        {text && <div className={styles.text} dangerouslySetInnerHTML={{ __html: textUtil.sanitize(text) }} />}
+        {text && <div className={styles.text} dangerouslySetInnerHTML={{ __html: text }} />}
         {alertText}
         <div>
           <HorizontalGroup spacing="xs" wrap>
