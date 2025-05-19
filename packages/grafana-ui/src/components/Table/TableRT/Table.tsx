@@ -37,7 +37,6 @@ import { RowsList } from './RowsList';
 import { useTableStyles } from './styles';
 
 const COLUMN_MIN_WIDTH = 150;
-const FOOTER_ROW_HEIGHT = 36;
 const NO_DATA_TEXT = 'No data';
 
 export const Table = memo((props: Props) => {
@@ -74,27 +73,6 @@ export const Table = memo((props: Props) => {
   const [footerItems, setFooterItems] = useState<FooterItem[] | undefined>(footerValues);
   const noValuesDisplayText = fieldConfig?.defaults?.noValue ?? NO_DATA_TEXT;
   const [inspectCell, setInspectCell] = useState<InspectCell | null>(null);
-
-  const footerHeight = useMemo(() => {
-    const EXTENDED_ROW_HEIGHT = FOOTER_ROW_HEIGHT;
-    let length = 0;
-
-    if (!footerItems) {
-      return 0;
-    }
-
-    for (const fv of footerItems) {
-      if (Array.isArray(fv) && fv.length > length) {
-        length = fv.length;
-      }
-    }
-
-    if (length > 1) {
-      return EXTENDED_ROW_HEIGHT * length;
-    }
-
-    return EXTENDED_ROW_HEIGHT;
-  }, [footerItems]);
 
   // React table data array. This data acts just like a dummy array to let react-table know how many rows exist.
   // The cells use the field to look up values, therefore this is simply a length/size placeholder.
@@ -238,7 +216,7 @@ export const Table = memo((props: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [footerOptions, theme, state.filters, data]);
 
-  let listHeight = height - (headerHeight + footerHeight);
+  let listHeight = rows.length * tableStyles.rowHeight;
 
   if (enablePagination) {
     listHeight -= tableStyles.cellHeight;
