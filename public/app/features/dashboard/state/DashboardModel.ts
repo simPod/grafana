@@ -370,6 +370,9 @@ export class DashboardModel implements TimeModel {
     this.events.publish(new TimeRangeUpdatedEvent(timeRange));
     dispatch(onTimeRangeUpdated(this.uid, timeRange));
 
+    const event = new CustomEvent('time-range-updated', { detail: timeRange })
+    window.parent.document.dispatchEvent(event)
+
     if (this.panelInEdit || this.panelInView) {
       this.timeRangeUpdatedDuringEditOrView = true;
     }
