@@ -155,6 +155,8 @@ export const getContentItems = (
     const cmp = allNumeric ? numberCmp : stringCmp;
     const mult = sortOrder === SortOrder.Descending ? -1 : 1;
     rows.sort((a, b) => mult * cmp(a, b));
+  } else if ( sortOrder === SortOrder.None && rows.length > 1) {
+    rows.reverse();
   }
 
   return rows;
